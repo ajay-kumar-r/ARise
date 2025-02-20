@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { List, ActivityIndicator } from 'react-native-paper';
+import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Card, List, ActivityIndicator } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { theme } from '../../theme'; 
 
 export default function HomeScreen() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [expandedSubject, setExpandedSubject] = useState(null);
-  const [expandedChapter, setExpandedChapter] = useState(null);
+  const [expandedChapters, setExpandedChapters] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    fetchSubjects(); // Fetch data on mount
+    fetchSubjects();
   }, []);
 
   const fetchSubjects = async () => {
     try {
       // TODO: Replace this with actual API call when backend is ready
-      // Example API call: const response = await fetch('https://your-api-endpoint.com/subjects');
+      // Example: const response = await fetch('https://your-api-endpoint.com/subjects');
       // const jsonData = await response.json();
       
       // Hardcoded data for now
@@ -56,7 +56,7 @@ export default function HomeScreen() {
                   },
                 ],
               },
-            ]),
+            ]), 
           1000
         )
       );
@@ -69,43 +69,64 @@ export default function HomeScreen() {
     }
   };
 
+  const toggleChapter = (chapterId) => {
+    setExpandedChapters((prev) => ({
+      ...prev,
+      [chapterId]: !prev[chapterId],
+    }));
+  };
+
   return (
     <ScrollView style={styles.container}>
       {loading ? (
         <ActivityIndicator animating={true} color={theme.colors.primary} size="large" />
       ) : (
         data.map((subject) => (
-          <List.Accordion
-            key={subject.id}
-            title={subject.name}
-            expanded={expandedSubject === subject.id}
-            onPress={() => setExpandedSubject(expandedSubject === subject.id ? null : subject.id)}
-            left={(props) => <List.Icon {...props} icon="book" />}
-          >
-            {subject.chapters.map((chapter) => (
-              <List.Accordion
-                key={chapter.id}
-                title={chapter.name}
-                expanded={expandedChapter === chapter.id}
-                onPress={() => setExpandedChapter(expandedChapter === chapter.id ? null : chapter.id)}
-                left={(props) => <List.Icon {...props} icon="folder" />}
-              >
-                {chapter.topics.map((topic) => (
-                  <List.Item
-                    key={topic.id}
-                    title={topic.name}
-                    onPress={() =>
-                      router.push({
-                        pathname: '/topic', 
-                        params: { id: topic.id, name: topic.name, description: topic.description },
-                      })
-                    }
-                    left={(props) => <List.Icon {...props} icon="file-document" />}
+          <Card key={subject.id} style={styles.card}>
+            <TouchableOpacity onPress={() => setExpandedSubject(expandedSubject === subject.id ? null : subject.id)}>
+              <Card.Title
+                title={subject.name}
+                left={(props) => <List.Icon {...props} icon="book" />}
+                right={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon={expandedSubject === subject.id ? 'chevron-up' : 'chevron-down'}
+                    style={{ marginRight: 15 }}
                   />
+                )}
+              />
+            </TouchableOpacity>
+
+            {expandedSubject === subject.id && (
+              <Card.Content>
+                {subject.chapters.map((chapter) => (
+                  <List.Accordion
+                    key={chapter.id}
+                    title={chapter.name}
+                    expanded={!!expandedChapters[chapter.id]}
+                    onPress={() => toggleChapter(chapter.id)}
+                    left={(props) => <List.Icon {...props} icon="folder" />}
+                    style={styles.chapterDropdown}
+                  >
+                    {chapter.topics.map((topic) => (
+                      <List.Item
+                        key={topic.id}
+                        title={topic.name}
+                        onPress={() =>
+                          router.push({
+                            pathname: '/topic',
+                            params: { id: topic.id, name: topic.name, description: topic.description },
+                          })
+                        }
+                        left={(props) => <List.Icon {...props} icon="file-document" />}
+                        style={styles.topicItem}
+                      />
+                    ))}
+                  </List.Accordion>
                 ))}
-              </List.Accordion>
-            ))}
-          </List.Accordion>
+              </Card.Content>
+            )}
+          </Card>
         ))
       )}
     </ScrollView>
@@ -115,7 +136,19 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 20,
     backgroundColor: 'white',
+  },
+  card: {
+    marginBottom: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 3,
+  },
+  chapterDropdown: {
+    backgroundColor: '#f5f5f5',
+  },
+  topicItem: {
+    marginLeft: 30, 
   },
 });
