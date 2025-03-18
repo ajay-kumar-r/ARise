@@ -12,6 +12,11 @@ export default function GreetingScreen() {
       router.replace('/(tabs)/home');  
     }, 100);
   };
+  const handleGetBOt = () => {
+    setTimeout(() => {
+      router.replace('/(bot)/chatbot');  
+    }, 100);
+  };
 
   return (
     <View style={styles.container}>
@@ -32,6 +37,15 @@ export default function GreetingScreen() {
         onPress={handleGetStarted} 
       >
         Get Started
+      </Button>
+      <Button 
+        mode="contained" 
+        buttonColor={theme.colors.primary} 
+        textColor={theme.colors.onPrimary} 
+        style={styles.button}
+        onPress={handleGetBOt} 
+      >
+        ChatBot
       </Button>
     </View>
   );
@@ -58,6 +72,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    borderRadius: 10,
+    margin: 5,  
   },
 });

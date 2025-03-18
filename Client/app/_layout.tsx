@@ -6,12 +6,12 @@ import { theme } from '../theme';
 
 export default function RootLayout() {
   const pathname = usePathname();
-
+ 
   return (
     <PaperProvider theme={theme}>
       <StatusBar style="light" />
 
-      {pathname !== '/greeting' && pathname !== '/' && <TopBar />}
+      {pathname !== '/greeting' && pathname !== '/' && pathname!=='/chatbot' && <TopBar />}
 
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="greeting" options={{ headerShown: false }} />
