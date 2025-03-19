@@ -30,23 +30,38 @@ export default function signup3({ navigation }: any) {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleNext = () => {
-    // Handle form submission or navigation to next screen
+  const handleSubmit = () => {
+    if (formData.password === '' || formData.confirmPassword === '') {
+      alert('Please fill in all fields');
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      alert('Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
     console.log("Form data:", formData);
-    router.replace("./signup3");
-  };
-
-  const handleLogin = () => {
+    alert("success");
     setTimeout(() => {
       router.replace("./loginScreen");
     }, 100);
   };
 
+  const handleLogin = () => {
+    setTimeout(() => {
+      router.replace("./loginScreen");
+    }, 100)
+  }
+
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -64,9 +79,8 @@ export default function signup3({ navigation }: any) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}
       >
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {/* Form Card */}
-          <View style={styles.formCard}>
+        <View style={styles.formCard}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.formTitle}>Sign in to ARise</Text>
             <Text style={styles.formSubtitle}>
               Please enter your details to proceed
@@ -92,7 +106,7 @@ export default function signup3({ navigation }: any) {
               />
             </View>
 
-            <TouchableOpacity style={styles.signupButton}>
+            <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
               <Text style={styles.signupButtonText}>Sign up</Text>
             </TouchableOpacity>
             <Text style={styles.loginText}>
@@ -102,8 +116,8 @@ export default function signup3({ navigation }: any) {
                 Login
               </Text>
             </Text>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -112,7 +126,7 @@ export default function signup3({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F09216", // Orange background color
+    backgroundColor: "#F09216", 
   },
   header: {
     paddingHorizontal: 20,
@@ -137,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   progressFill: {
-    width: 110, // Adjust based on progress
+    width: 110, 
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,

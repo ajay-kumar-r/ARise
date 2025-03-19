@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,10 +10,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 interface FormData {
   firstName: string;
@@ -25,10 +24,10 @@ interface FormData {
 export default function signup1({ navigation }: any) {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
   });
 
   const handleChange = (field: keyof FormData, value: string) => {
@@ -36,24 +35,27 @@ export default function signup1({ navigation }: any) {
   };
 
   const handleNext = () => {
-    // Handle form submission or navigation to next screen
-    console.log('Form data:', formData);
-    // if (formData.firstName === '' || formData.lastName === '' || formData.username === '' || formData.email === '') {
-    //   alert('Please fill in all fields');
-    //   return;
-    // }
-    router.replace('./signup2');  
+    if (formData.firstName === '' || formData.lastName === '' || formData.username === '' || formData.email === '') {
+      alert('Please fill in all fields');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    console.log("Form data:", formData);
+    router.replace("./signup2");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      
-      {/* Header */}
+
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.replace('./loginScreen')}
+          onPress={() => router.replace("./loginScreen")}
         >
           <Ionicons name="arrow-back" size={24} color="#1D1B20" />
         </TouchableOpacity>
@@ -64,65 +66,66 @@ export default function signup1({ navigation }: any) {
       </View>
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}
       >
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {/* Form Card */}
-          <View style={styles.formCard}>
+        <View style={styles.formCard}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.formTitle}>Sign in to ARise</Text>
-            <Text style={styles.formSubtitle}>Please enter your details to proceed</Text>
-            
+            <Text style={styles.formSubtitle}>
+              Please enter your details to proceed
+            </Text>
+
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>First Name</Text>
               <TextInput
                 style={styles.input}
                 value={formData.firstName}
-                onChangeText={(text) => handleChange('firstName', text)}
+                onChangeText={(text) => handleChange("firstName", text)}
                 placeholder=""
               />
             </View>
-            
+
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Last Name</Text>
               <TextInput
                 style={styles.input}
                 value={formData.lastName}
-                onChangeText={(text) => handleChange('lastName', text)}
+                onChangeText={(text) => handleChange("lastName", text)}
                 placeholder=""
               />
             </View>
-            
+
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Username</Text>
               <TextInput
                 style={styles.input}
                 value={formData.username}
-                onChangeText={(text) => handleChange('username', text)}
+                onChangeText={(text) => handleChange("username", text)}
                 placeholder=""
               />
             </View>
-            
+
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Email</Text>
               <TextInput
                 style={styles.input}
                 value={formData.email}
-                onChangeText={(text) => handleChange('email', text)}
+                onChangeText={(text) => handleChange("email", text)}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 placeholder=""
               />
             </View>
-            
+
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
                 <Text style={styles.nextButtonText}>Next</Text>
                 <Ionicons name="arrow-forward" size={16} color="#1E1E1E" />
               </TouchableOpacity>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -131,7 +134,7 @@ export default function signup1({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F09216', // Orange background color
+    backgroundColor: "#F09216", 
   },
   header: {
     paddingHorizontal: 20,
@@ -142,22 +145,22 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   headerTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 24,
     fontFamily: "Poppins-Bold",
     marginBottom: 10,
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#7878801F',
+    backgroundColor: "#7878801F",
     borderRadius: 9,
     width: 330,
     padding: 2,
   },
   progressFill: {
-    width: 110, // Adjust based on progress
-    height: '100%',
-    backgroundColor: '#FFFFFF',
+    width: 110, 
+    height: "100%",
+    backgroundColor: "#FFFFFF",
     borderRadius: 7,
   },
   keyboardAvoidingView: {
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
   },
   formCard: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     padding: 20,
@@ -176,47 +179,47 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     fontSize: 24,
-    fontFamily: 'Poppins-Bold',
-    color: '#B66800',
+    fontFamily: "Poppins-Bold",
+    color: "#B66800",
     marginBottom: 8,
   },
   formSubtitle: {
     fontSize: 13,
-    color: '#000000A6',
+    color: "#000000A6",
     marginBottom: 25,
-    fontFamily: 'NanumGothic-Bold',
+    fontFamily: "NanumGothic-Bold",
   },
   inputContainer: {
     marginBottom: 20,
   },
   inputLabel: {
     fontSize: 14,
-    color: '#0000005C',
+    color: "#0000005C",
     marginBottom: 8,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: "Poppins-Regular",
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: "#E0E0E0",
     paddingVertical: 8,
     fontSize: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     marginTop: 20,
   },
   nextButton: {
-    backgroundColor: '#F09216', // Orange button
+    backgroundColor: "#F09216", 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   nextButtonText: {
-    color: '#1E1E1E',
+    color: "#1E1E1E",
     marginRight: 5,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: "Poppins-SemiBold",
   },
 });

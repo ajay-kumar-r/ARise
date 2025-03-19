@@ -36,7 +36,7 @@ export default function GreetingScreen() {
         style={styles.button}
         onPress={handleGetStarted} 
       >
-        Get Started
+        Let's get stARted
       </Button>
       <Button 
         mode="contained" 

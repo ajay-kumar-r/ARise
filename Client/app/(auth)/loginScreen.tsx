@@ -6,37 +6,54 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  SafeAreaView,
+  StatusBar,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-const LoginScreen = () => {
-  const navigation = useNavigation();
-  const router = useRouter();
-  const handleSignUp = () => {
-    setTimeout(() => {
-      router.replace("/(auth)/signup1");
-    }, 100);
-  };
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => router.replace("../greeting")}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="#1D1B20"
-            style={{ top: 22, left: 12 }}
-          />
-        </TouchableOpacity>
+interface FormData {
+  email: string;
+  password: string;
+}
 
+export default function LoginScreen() {
+  const router = useRouter();
+  const [formData, setFormData] = React.useState<FormData>({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (field: keyof FormData, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleSignUp = () => {
+    router.replace("/(auth)/signup1");
+  };
+
+  const handleUserValidation = () => {
+    //  add user validation logic here
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+
+      <TouchableOpacity
+        onPress={() => router.replace("../greeting")}
+        style={styles.backButton}
+      >
+        <Ionicons name="arrow-back" size={24} color="#1D1B20" />
+      </TouchableOpacity>
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <Text style={styles.headerTitle}>Hello!</Text>
@@ -51,50 +68,73 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.formContainer}>
-          <Text style={styles.loginTitle}>Login</Text>
-          <Text style={styles.loginSubtitle}>
-            Please enter your credentials
-          </Text>
-
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            keyboardType="email-address"
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            secureTextEntry
-          />
-
-          <TouchableOpacity>
-            <Text style={styles.forgotPassword}>Forget Password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.signupText}>
-            Don't have an account?
-            <Text style={styles.signupLink} onPress={handleSignUp}>
-              {" "}
-              Sign up
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <Text style={styles.loginTitle}>Login</Text>
+            <Text style={styles.loginSubtitle}>
+              Please enter your credentials
             </Text>
-          </Text>
+
+            <View>
+              <Text style={styles.inputLabel}>Email</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.email}
+                onChangeText={(text) => handleChange("email", text)}
+                placeholder=""
+              />
+            </View>
+            <View>
+              <Text style={styles.inputLabel}>Password</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.password}
+                onChangeText={(text) => handleChange("password", text)}
+                placeholder=""
+              />
+            </View>
+
+            <TouchableOpacity>
+              <Text style={styles.forgotPassword}>Forget Password?</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.loginButton}>
+              <Text
+                style={styles.loginButtonText}
+                onPress={handleUserValidation}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
+
+            <Text style={styles.signupText}>
+              Don't have an account?
+              <Text style={styles.signupLink} onPress={handleSignUp}>
+                {" "}
+                Sign up
+              </Text>
+            </Text>
+          </ScrollView>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#F09216",
+  },
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 10,
   },
   header: {
     flexDirection: "row",
     padding: 20,
+    paddingTop: 80,
   },
   headerContent: {
     flexDirection: "column",
@@ -115,12 +155,12 @@ const styles = StyleSheet.create({
     height: 145,
   },
   formContainer: {
+    flex: 1,
     backgroundColor: "white",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 35,
-    height: "100%",
-    marginTop: 8,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    padding: 20,
+    paddingTop: 30,
   },
   loginTitle: {
     fontSize: 24,
@@ -169,6 +209,12 @@ const styles = StyleSheet.create({
     color: "#F09216",
     fontFamily: "Poppins-SemiBold",
   },
+  scrollView: {
+    flexGrow: 1,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: "#0000005C",
+    fontFamily: "Poppins-Regular",
+  },
 });
-
-export default LoginScreen;

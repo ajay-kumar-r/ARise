@@ -33,12 +33,15 @@ export default function signup2({ navigation }: any) {
   };
 
   const handleNext = () => {
-    // Handle form submission or navigation to next screen
+    if (formData.branch === '' || formData.course === '' || formData.yearOfStudy === '') {
+      alert('Please fill in all fields');
+      return;
+    }
+    if (parseInt(formData.yearOfStudy) < 1 || parseInt(formData.yearOfStudy) > 5) {
+      alert('Please enter a valid year of study');
+      return;
+    }
     console.log("Form data:", formData);
-    // if (formData.branch === '' || formData.course === '' || formData.yearOfStudy === '') {
-    //     alert('Please fill in all fields');
-    //     return;
-    //   }
     router.replace("./signup3");
   };
 
@@ -46,7 +49,6 @@ export default function signup2({ navigation }: any) {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -64,9 +66,8 @@ export default function signup2({ navigation }: any) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}
       >
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {/* Form Card */}
-          <View style={styles.formCard}>
+        <View style={styles.formCard}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.formTitle}>Sign in to ARise</Text>
             <Text style={styles.formSubtitle}>
               Please enter your details to proceed
@@ -99,6 +100,8 @@ export default function signup2({ navigation }: any) {
                 value={formData.yearOfStudy}
                 onChangeText={(text) => handleChange("yearOfStudy", text)}
                 placeholder=""
+                keyboardType="number-pad"
+                maxLength={1}
               />
             </View>
 
@@ -108,8 +111,8 @@ export default function signup2({ navigation }: any) {
                 <Ionicons name="arrow-forward" size={16} color="#1E1E1E" />
               </TouchableOpacity>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -118,7 +121,7 @@ export default function signup2({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F09216", // Orange background color
+    backgroundColor: "#F09216", 
   },
   header: {
     paddingHorizontal: 20,
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   progressFill: {
-    width: 110, // Adjust based on progress
+    width: 110, 
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   nextButton: {
-    backgroundColor: "#F09216", // Orange button
+    backgroundColor: "#F09216", 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
