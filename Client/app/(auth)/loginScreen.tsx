@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ArrowLeftIcon } from "lucide-react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 const LoginScreen = () => {
@@ -20,58 +23,68 @@ const LoginScreen = () => {
     }, 100);
   };
   return (
-    <View style={styles.container}>
-      {/* Header Section */}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <ArrowLeftIcon size={28} color="black" style={{ top: 22, left: 12 }} />
-      </TouchableOpacity>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => router.replace("../greeting")}>
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="#1D1B20"
+            style={{ top: 22, left: 12 }}
+          />
+        </TouchableOpacity>
 
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Hello!</Text>
-          <Text style={styles.headerSubtitle}>Welcome to ARise</Text>
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Text style={styles.headerTitle}>Hello!</Text>
+            <Text style={styles.headerSubtitle}>Welcome to ARise</Text>
+          </View>
+
+          <Image
+            source={require("../../assets/images/desktop.png")}
+            style={styles.headerImage}
+            resizeMode="contain"
+          />
         </View>
 
-        <Image
-          source={require("../../assets/images/desktop.png")}
-          style={styles.headerImage}
-          resizeMode="contain"
-        />
-      </View>
-
-      {/* Login Form */}
-      <View style={styles.formContainer}>
-        <Text style={styles.loginTitle}>Login</Text>
-        <Text style={styles.loginSubtitle}>Please enter your credentials</Text>
-
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          keyboardType="email-address"
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-        />
-
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forget Password?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.signupText}>
-          Don't have an account?
-          <Text style={styles.signupLink} onPress={handleSignUp}>
-            {" "}
-            Sign up
+        <View style={styles.formContainer}>
+          <Text style={styles.loginTitle}>Login</Text>
+          <Text style={styles.loginSubtitle}>
+            Please enter your credentials
           </Text>
-        </Text>
+
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            keyboardType="email-address"
+          />
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry
+          />
+
+          <TouchableOpacity>
+            <Text style={styles.forgotPassword}>Forget Password?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.loginButton}>
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.signupText}>
+            Don't have an account?
+            <Text style={styles.signupLink} onPress={handleSignUp}>
+              {" "}
+              Sign up
+            </Text>
+          </Text>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -90,7 +103,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "white",
     fontSize: 40,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Bold",
   },
   headerSubtitle: {
     fontFamily: "Play-Regular",
@@ -111,14 +124,15 @@ const styles = StyleSheet.create({
   },
   loginTitle: {
     fontSize: 24,
-    fontWeight: "bold",
     color: "#B66800",
+    fontFamily: "Poppins-Bold",
   },
   loginSubtitle: {
     color: "#000000A6",
-    fontWeight: 700,
+    fontFamily: "NanumGothic-Bold",
     marginTop: 8,
     marginBottom: 16,
+    fontSize: 13,
   },
   input: {
     borderBottomWidth: 1,
@@ -131,7 +145,7 @@ const styles = StyleSheet.create({
     color: "#F09216",
     textAlign: "right",
     marginBottom: 20,
-    fontWeight: 500,
+    fontFamily: "Poppins-SemiBold",
   },
   loginButton: {
     backgroundColor: "#F09216",
@@ -143,16 +157,17 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: "#1E1E1EC2",
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins-SemiBold",
   },
   signupText: {
     color: "#0000005C",
     textAlign: "center",
     marginTop: 20,
+    fontFamily: "Poppins-Regular",
   },
   signupLink: {
     color: "#F09216",
-    fontWeight: "bold",
+    fontFamily: "Poppins-SemiBold",
   },
 });
 

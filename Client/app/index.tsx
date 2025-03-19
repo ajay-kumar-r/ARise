@@ -17,6 +17,9 @@ export default function IndexScreen() {
         "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
         "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
         "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
+        "NanumGothic-Regular": require("../assets/fonts/NanumGothic-Regular.ttf"),
+        "NanumGothic-Bold": require("../assets/fonts/NanumGothic-Bold.ttf"),
+        "NanumGothic-ExtraBold": require("../assets/fonts/NanumGothic-ExtraBold.ttf"),
       });
       setFontsLoaded(true);
     };
