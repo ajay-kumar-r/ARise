@@ -9,7 +9,7 @@ export default function GreetingScreen() {
 
   const handleGetStarted = () => {
     setTimeout(() => {
-      router.replace('/(tabs)/home');  
+      router.replace('/(auth)/loginScreen');  
     }, 100);
   };
 
