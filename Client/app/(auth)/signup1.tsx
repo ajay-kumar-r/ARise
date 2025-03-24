@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useForm } from "./formContext";
+import { ToastAndroid } from "react-native";
 
 interface FormData {
   firstName: string;
@@ -21,31 +23,38 @@ interface FormData {
   email: string;
 }
 
-export default function signup1({ navigation }: any) {
+export default function Signup1() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-  });
+  const { formData, setFormData } = useForm();
+
+  const lastNameRef = useRef<TextInput>(null);
+  const usernameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleNext = () => {
-    if (formData.firstName === '' || formData.lastName === '' || formData.username === '' || formData.email === '') {
-      alert('Please fill in all fields');
+    if (
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.username === "" ||
+      formData.email === ""
+    ) {
+      ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      alert('Please enter a valid email address');
+      ToastAndroid.show(
+        "Please enter a valid email address",
+        ToastAndroid.SHORT
+      );
       return;
     }
     console.log("Form data:", formData);
-    router.replace("./signup2");
+    router.push("./signup2");
   };
 
   return (
@@ -55,7 +64,7 @@ export default function signup1({ navigation }: any) {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.replace("./loginScreen")}
+          onPress={() => router.push("./loginScreen")}
         >
           <Ionicons name="arrow-back" size={24} color="#1D1B20" />
         </TouchableOpacity>
@@ -76,44 +85,59 @@ export default function signup1({ navigation }: any) {
               Please enter your details to proceed
             </Text>
 
+            {/* First Name Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>First Name</Text>
               <TextInput
                 style={styles.input}
                 value={formData.firstName}
                 onChangeText={(text) => handleChange("firstName", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => lastNameRef.current?.focus()}
                 placeholder=""
               />
             </View>
 
+            {/* Last Name Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Last Name</Text>
               <TextInput
+                ref={lastNameRef}
                 style={styles.input}
                 value={formData.lastName}
                 onChangeText={(text) => handleChange("lastName", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => usernameRef.current?.focus()}
                 placeholder=""
               />
             </View>
 
+            {/* Username Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Username</Text>
               <TextInput
+                ref={usernameRef}
                 style={styles.input}
                 value={formData.username}
                 onChangeText={(text) => handleChange("username", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => emailRef.current?.focus()}
                 placeholder=""
               />
             </View>
 
+            {/* Email Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Email</Text>
               <TextInput
+                ref={emailRef}
                 style={styles.input}
                 value={formData.email}
                 onChangeText={(text) => handleChange("email", text)}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                returnKeyType="done"
+                onSubmitEditing={handleNext}
                 placeholder=""
               />
             </View>
@@ -134,7 +158,7 @@ export default function signup1({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
   },
   header: {
     paddingHorizontal: 20,
@@ -158,7 +182,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   progressFill: {
-    width: 110, 
+    width: 110,
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,
@@ -210,7 +234,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   nextButton: {
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,

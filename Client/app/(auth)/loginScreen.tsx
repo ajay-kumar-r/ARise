@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   Text,
@@ -26,6 +26,8 @@ export default function LoginScreen() {
     email: "",
     password: "",
   });
+
+  const passwordRef = useRef<TextInput>(null);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -80,15 +82,22 @@ export default function LoginScreen() {
                 style={styles.input}
                 value={formData.email}
                 onChangeText={(text) => handleChange("email", text)}
+                onSubmitEditing={() => passwordRef.current?.focus()}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                returnKeyType="next"
                 placeholder=""
               />
             </View>
             <View>
               <Text style={styles.inputLabel}>Password</Text>
               <TextInput
+                ref={passwordRef}
                 style={styles.input}
                 value={formData.password}
                 onChangeText={(text) => handleChange("password", text)}
+                secureTextEntry
+                returnKeyType="done"
                 placeholder=""
               />
             </View>

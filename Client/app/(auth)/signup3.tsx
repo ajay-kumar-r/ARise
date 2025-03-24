@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -13,50 +13,47 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useForm } from "./formContext";
+import { ToastAndroid } from "react-native";
 
 interface FormData {
   password: string;
   confirmPassword: string;
 }
 
-export default function signup3({ navigation }: any) {
+export default function Signup3() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    password: "",
-    confirmPassword: "",
-  });
+  const { formData, setFormData } = useForm();
+
+  const confirmPasswordRef = useRef<TextInput>(null);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = () => {
-    if (formData.password === '' || formData.confirmPassword === '') {
-      alert('Please fill in all fields');
+    if (formData.password === "" || formData.confirmPassword === "") {
+      alert("Please fill in all fields");
       return;
     }
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_])[A-Za-z\d!@#$%^&*]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
-      alert('Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character');
+      alert(
+        "Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character"
+      );
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      alert("Passwords do not match");
       return;
     }
     console.log("Form data:", formData);
-    alert("success");
+    ToastAndroid.show("Signup completed successfully", ToastAndroid.SHORT);
     setTimeout(() => {
-      router.replace("./loginScreen");
+      router.push("./loginScreen");
     }, 100);
   };
-
-  const handleLogin = () => {
-    setTimeout(() => {
-      router.replace("./loginScreen");
-    }, 100)
-  }
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,7 +62,7 @@ export default function signup3({ navigation }: any) {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.replace("./signup2")}
+          onPress={() => router.push("./signup2")}
         >
           <Ionicons name="arrow-back" size={24} color="#1D1B20" />
         </TouchableOpacity>
@@ -92,30 +89,31 @@ export default function signup3({ navigation }: any) {
                 style={styles.input}
                 value={formData.password}
                 onChangeText={(text) => handleChange("password", text)}
-                placeholder=""
+                secureTextEntry
+                returnKeyType="next"
+                onSubmitEditing={() => confirmPasswordRef.current?.focus()}
               />
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Confirm Password</Text>
               <TextInput
+                ref={confirmPasswordRef}
                 style={styles.input}
                 value={formData.confirmPassword}
                 onChangeText={(text) => handleChange("confirmPassword", text)}
-                placeholder=""
+                secureTextEntry
+                returnKeyType="done"
+                onSubmitEditing={handleSubmit}
               />
             </View>
 
-            <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
+            <TouchableOpacity
+              style={styles.signupButton}
+              onPress={handleSubmit}
+            >
               <Text style={styles.signupButtonText}>Sign up</Text>
             </TouchableOpacity>
-            <Text style={styles.loginText}>
-              Already have an account?
-              <Text style={styles.loginLink} onPress={handleLogin}>
-                {" "}
-                Login
-              </Text>
-            </Text>
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
@@ -126,7 +124,7 @@ export default function signup3({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
   },
   header: {
     paddingHorizontal: 20,
@@ -148,10 +146,10 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     width: 330,
     padding: 2,
-    alignItems: "flex-end",
+    alignItems: "center",
   },
   progressFill: {
-    width: 110, 
+    width: 330,
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,
@@ -207,16 +205,6 @@ const styles = StyleSheet.create({
   signupButtonText: {
     color: "#1E1E1EC2",
     fontSize: 18,
-    fontFamily: "Poppins-SemiBold",
-  },
-  loginText: {
-    color: "#0000005C",
-    textAlign: "center",
-    marginTop: 20,
-    fontFamily: "Poppins-Regular",
-  },
-  loginLink: {
-    color: "#F09216",
     fontFamily: "Poppins-SemiBold",
   },
 });

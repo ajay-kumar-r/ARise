@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -13,36 +13,44 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useForm } from "./formContext";
+import { ToastAndroid } from "react-native";
 interface FormData {
   branch: string;
   course: string;
   yearOfStudy: string;
 }
 
-export default function signup2({ navigation }: any) {
+export default function Signup2() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    branch: "",
-    course: "",
-    yearOfStudy: "",
-  });
+  const { formData, setFormData } = useForm();
+
+  const branchRef = useRef<TextInput>(null);
+  const yearOfStudyRef = useRef<TextInput>(null);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleNext = () => {
-    if (formData.branch === '' || formData.course === '' || formData.yearOfStudy === '') {
-      alert('Please fill in all fields');
+    if (
+      formData.branch === "" ||
+      formData.course === "" ||
+      formData.yearOfStudy === ""
+    ) {
+      ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
       return;
     }
-    if (parseInt(formData.yearOfStudy) < 1 || parseInt(formData.yearOfStudy) > 5) {
-      alert('Please enter a valid year of study');
+    const year = parseInt(formData.yearOfStudy);
+    if (isNaN(year) || year < 1 || year > 5) {
+      ToastAndroid.show(
+        "Please enter a valid year of study (1-5)",
+        ToastAndroid.SHORT
+      );
       return;
     }
     console.log("Form data:", formData);
-    router.replace("./signup3");
+    router.push("./signup3");
   };
 
   return (
@@ -52,7 +60,7 @@ export default function signup2({ navigation }: any) {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.replace("./signup1")}
+          onPress={() => router.push("./signup1")}
         >
           <Ionicons name="arrow-back" size={24} color="#1D1B20" />
         </TouchableOpacity>
@@ -73,35 +81,46 @@ export default function signup2({ navigation }: any) {
               Please enter your details to proceed
             </Text>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Branch</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.branch}
-                onChangeText={(text) => handleChange("branch", text)}
-                placeholder=""
-              />
-            </View>
-
+            {/* Course Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Course</Text>
               <TextInput
                 style={styles.input}
                 value={formData.course}
                 onChangeText={(text) => handleChange("course", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => branchRef.current?.focus()}
                 placeholder=""
               />
             </View>
 
+            {/* Branch Input */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Branch</Text>
+              <TextInput
+                ref={branchRef}
+                style={styles.input}
+                value={formData.branch}
+                onChangeText={(text) => handleChange("branch", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => yearOfStudyRef.current?.focus()}
+                placeholder=""
+              />
+            </View>
+
+            {/* Year of Study Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Year of Study</Text>
               <TextInput
+                ref={yearOfStudyRef}
                 style={styles.input}
                 value={formData.yearOfStudy}
                 onChangeText={(text) => handleChange("yearOfStudy", text)}
                 placeholder=""
                 keyboardType="number-pad"
                 maxLength={1}
+                returnKeyType="done"
+                onSubmitEditing={handleNext}
               />
             </View>
 
@@ -121,7 +140,7 @@ export default function signup2({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
   },
   header: {
     paddingHorizontal: 20,
@@ -146,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   progressFill: {
-    width: 110, 
+    width: 110,
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,
@@ -198,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   nextButton: {
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
