@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   header: {
-    height: 105,
+    height: 95,
     backgroundColor: '#F09216',
     flexDirection: 'row',
     alignItems: 'flex-end',
