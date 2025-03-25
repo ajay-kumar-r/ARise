@@ -10,7 +10,7 @@ export default function Chatbot() {
 
   const handleBack = () => {
     setTimeout(() => {
-      router.replace('/');
+      router.replace('/(tabs)/home');
     }, 100);
   };
 
