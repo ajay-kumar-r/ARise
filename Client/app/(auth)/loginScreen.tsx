@@ -38,7 +38,7 @@ export default function LoginScreen() {
   };
 
   const handleUserValidation = () => {
-    //  add user validation logic here
+    router.push(".\.\(tabs)home.tsx");
   };
 
   return (

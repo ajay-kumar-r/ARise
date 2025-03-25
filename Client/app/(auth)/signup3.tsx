@@ -132,7 +132,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   backButton: {
-    marginBottom: 15,
+    top: 40,
+    marginBottom: 55,
+    zIndex: 10,
   },
   headerTitle: {
     color: "white",
@@ -147,11 +149,14 @@ const styles = StyleSheet.create({
     width: 330,
     padding: 2,
     alignItems: "center",
+    position: "relative",
   },
   progressFill: {
-    width: 330,
+    width: 110,
     height: "100%",
+    right: 0,
     backgroundColor: "#FFFFFF",
+    position: "absolute",
     borderRadius: 7,
   },
   keyboardAvoidingView: {

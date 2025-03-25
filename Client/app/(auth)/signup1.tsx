@@ -166,7 +166,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   backButton: {
-    marginBottom: 15,
+    top: 40,
+    marginBottom: 55,
+    zIndex: 10,
   },
   headerTitle: {
     color: "white",

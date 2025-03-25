@@ -27,7 +27,7 @@ export default function HomeScreen() {
           () =>
             resolve([
               {
-                id: '1',
+                id: '1', 
                 name: 'Mathematics',
                 chapters: [
                   {

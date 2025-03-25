@@ -11,7 +11,7 @@ export default function RootLayout() {
     <PaperProvider theme={theme}>
       <StatusBar style="light" />
 
-      {pathname !== '/greeting' && pathname !== '/' && pathname!=='/chatbot' && <TopBar />}
+      {pathname !== '/greeting' && pathname !== '/loginScreen' && pathname !== '/signup1' && pathname !== '/signup2' && pathname !== '/signup3'  && pathname !== '/ProfileScreen' && pathname!=='/chatbot' && <TopBar />}
 
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="greeting" options={{ headerShown: false }} />
