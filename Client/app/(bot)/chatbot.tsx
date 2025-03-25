@@ -16,8 +16,8 @@ export default function Chatbot() {
 
   const handleSend = () => {
     if (inputText.trim() === '') return;
-    
- 
+
+
     const newMessage = { id: messages.length + 1, text: inputText, sender: 'user' };
     setMessages([...messages, newMessage]);
     setInputText('');
@@ -36,17 +36,18 @@ export default function Chatbot() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <IconButton icon="chevron-left" size={26} color="black" onPress={handleBack} />
         <View style={styles.leftSection}>
-          <IconButton icon="robot" size={40} color="black" />
+          <IconButton icon="robot" style={styles.iconButton} size={33} color="black" />
           <View style={styles.textContainer}>
             <Text style={styles.title}>Helpy</Text>
             <Text style={styles.onlineText}>Online</Text>
           </View>
         </View>
-        <IconButton icon="chevron-left" size={24} color="black" onPress={handleBack} />
+
       </View>
 
-    
+
       <FlatList
         data={messages}
         keyExtractor={(item) => item.id.toString()}
@@ -56,7 +57,7 @@ export default function Chatbot() {
           </View>
         )}
         contentContainerStyle={styles.chatContainer}
-      
+
       />
 
 
@@ -71,9 +72,16 @@ export default function Chatbot() {
             placeholder="Message..."
             style={styles.input}
             underlineColor="transparent"
-            placeholderTextColor="#999" 
+            activeUnderlineColor="transparent" 
+            placeholderTextColor="#999"
           />
-          <IconButton icon="send" size={28}  color="orange" style={{ transform: [{ rotate: '320deg' }] }} onPress={handleSend} />
+          <IconButton
+            icon="send"
+            size={28}
+            iconColor="#F09216" 
+            style={{ transform: [{ rotate: '0deg' }] }}
+            onPress={handleSend}
+          />
         </View>
       </KeyboardAvoidingView>
 
@@ -83,32 +91,46 @@ export default function Chatbot() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     backgroundColor: '#F5F5F5',
   },
   header: {
-    height: 85,
-    backgroundColor: '#FFA500',
+    height: 105,
+    backgroundColor: '#F09216',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
   },
   leftSection: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: -10,
+
   },
+  iconButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 1,
+    paddingBottom: 5,
+  }
+  ,
   textContainer: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
   title: {
     color: '#000',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   onlineText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '400',
+    color: '#fff',
   },
   chatContainer: {
     flexGrow: 1,
@@ -126,34 +148,33 @@ const styles = StyleSheet.create({
   },
   botMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FFA500',
+    backgroundColor: '#F09216',
   },
   messageText: {
     color: 'black',
   },
 
   inputContainer: {
-    paddingBottom: 10, 
+    paddingBottom: 10,
     paddingHorizontal: 10,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 50, 
+    borderRadius: 50,
     paddingHorizontal: 15,
     paddingVertical: 5,
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 5, 
+    elevation: 5,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
 
   },
 });
-

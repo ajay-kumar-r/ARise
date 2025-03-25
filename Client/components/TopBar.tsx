@@ -12,7 +12,7 @@ export default function TopBar() {
 const styles = StyleSheet.create({
   container: {
     height: 85,
-    backgroundColor: '#FFA500',
+    backgroundColor: '#F09216',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20, 

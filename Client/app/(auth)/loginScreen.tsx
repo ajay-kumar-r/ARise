@@ -38,7 +38,7 @@ export default function LoginScreen() {
   };
 
   const handleUserValidation = () => {
-    router.push(".\.\(tabs)home.tsx");
+    router.replace("/(tabs)/home");
   };
 
   return (

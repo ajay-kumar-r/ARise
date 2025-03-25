@@ -1,6 +1,6 @@
 import { Tabs, usePathname } from "expo-router";
 import BottomBar from "@/components/BottomBar";
-import { FormProvider } from "./formContext"; // Ensure the correct import path
+import { FormProvider } from "./formContext"; 
 
 export default function TabLayout() {
   const pathname = usePathname();

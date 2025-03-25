@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { theme } from '../theme';
 
 export default function GreetingScreen() {
   const router = useRouter();
@@ -30,19 +29,17 @@ export default function GreetingScreen() {
       </Text>
 
       <Button 
-        mode="contained" 
-        buttonColor={theme.colors.primary} 
-        textColor={theme.colors.onPrimary} 
-        style={styles.button}
+        mode="contained"  
+        style={styles.button} 
+        theme={{ colors: { primary: "#F09216" } }} 
         onPress={handleGetStarted} 
       >
         Let's get stARted
       </Button>
       <Button 
         mode="contained" 
-        buttonColor={theme.colors.primary} 
-        textColor={theme.colors.onPrimary} 
         style={styles.button}
+        theme={{ colors: { primary: "#F09216" } }}
         onPress={handleGetBOt} 
       >
         ChatBot
@@ -67,7 +64,6 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: 'center',
-    color: theme.colors.text,
     marginBottom: 20,
   },
   button: {
