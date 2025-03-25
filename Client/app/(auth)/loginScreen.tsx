@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ export default function LoginScreen() {
     password: "",
   });
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const passwordRef = useRef<TextInput>(null);
 
   const handleChange = (field: keyof FormData, value: string) => {
@@ -37,8 +38,41 @@ export default function LoginScreen() {
     router.replace("/(auth)/signup1");
   };
 
-  const handleUserValidation = () => {
-    router.replace("/(tabs)/home");
+  const handleUserValidation = async () => {
+    console.log("Login button pressed");
+    try {
+      const response = await fetch("http://10.16.50.125:5000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      console.log("Response received:", response);
+
+      if (response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          console.log("Parsed response data:", data);
+          router.replace("/(tabs)/home");
+        } else {
+          console.log("Unexpected response format");
+          alert("Unexpected response format. Please try again.");
+        }
+      } else {
+        const errorData = await response.json().catch(() => null);
+        console.log("Error response data:", errorData);
+        alert(errorData?.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An error occurred. Please check your network connection.");
+    }
   };
 
   return (
@@ -89,30 +123,40 @@ export default function LoginScreen() {
                 placeholder=""
               />
             </View>
+
             <View>
               <Text style={styles.inputLabel}>Password</Text>
-              <TextInput
-                ref={passwordRef}
-                style={styles.input}
-                value={formData.password}
-                onChangeText={(text) => handleChange("password", text)}
-                secureTextEntry
-                returnKeyType="done"
-                placeholder=""
-              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  ref={passwordRef}
+                  style={styles.passwordInput}
+                  value={formData.password}
+                  onChangeText={(text) => handleChange("password", text)}
+                  secureTextEntry={!passwordVisible}
+                  returnKeyType="done"
+                  placeholder=""
+                />
+                <TouchableOpacity
+                  onPress={() => setPasswordVisible(!passwordVisible)}
+                >
+                  <Ionicons
+                    name={passwordVisible ? "eye" : "eye-off"}
+                    size={24}
+                    color="gray"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forget Password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginButton}>
-              <Text
-                style={styles.loginButtonText}
-                onPress={handleUserValidation}
-              >
-                Login
-              </Text>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleUserValidation}
+            >
+              <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
 
             <Text style={styles.signupText}>
@@ -190,6 +234,18 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     fontSize: 16,
   },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
+    paddingVertical: 8,
+    marginBottom: 25,
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 16,
+  },
   forgotPassword: {
     color: "#F09216",
     textAlign: "right",
@@ -227,3 +283,4 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
 });
+

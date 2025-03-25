@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -26,16 +26,29 @@ export default function Signup3() {
   const { formData, setFormData } = useForm();
 
   const confirmPasswordRef = useRef<TextInput>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = () => {
-    if (formData.password === "" || formData.confirmPassword === "") {
+  const handleSubmit = async () => {
+    if (
+      formData.password === "" ||
+      formData.confirmPassword === "" ||
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.username === "" ||
+      formData.email === "" ||
+      formData.branch === "" ||
+      formData.course === "" ||
+      formData.yearOfStudy === ""
+    ) {
       alert("Please fill in all fields");
       return;
     }
+
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_])[A-Za-z\d!@#$%^&*]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
@@ -44,15 +57,48 @@ export default function Signup3() {
       );
       return;
     }
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    console.log("Form data:", formData);
-    ToastAndroid.show("Signup completed successfully", ToastAndroid.SHORT);
-    setTimeout(() => {
-      router.push("./loginScreen");
-    }, 100);
+
+    try {
+      console.log("Submitting form data:", formData);
+
+      const response = await fetch("http://10.16.50.125:5000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+          email: formData.email,
+          branch: formData.branch,
+          course: formData.course,
+          yearOfStudy: formData.yearOfStudy,
+          password: formData.password,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Signup successful:", data);
+        ToastAndroid.show("Signup completed successfully", ToastAndroid.SHORT);
+        setTimeout(() => {
+          router.push("./loginScreen");
+        }, 100);
+      } else {
+        const errorData = await response.json().catch(() => null);
+        console.error("Signup failed:", errorData);
+        alert(errorData?.message || "Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("An error occurred. Please check your network connection.");
+    }
   };
 
   return (
@@ -85,27 +131,51 @@ export default function Signup3() {
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>New Password</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.password}
-                onChangeText={(text) => handleChange("password", text)}
-                secureTextEntry
-                returnKeyType="next"
-                onSubmitEditing={() => confirmPasswordRef.current?.focus()}
-              />
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  style={styles.input}
+                  value={formData.password}
+                  onChangeText={(text) => handleChange("password", text)}
+                  secureTextEntry={!showPassword}
+                  returnKeyType="next"
+                  onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={styles.eyeButton}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={22}
+                    color="grey"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Confirm Password</Text>
-              <TextInput
-                ref={confirmPasswordRef}
-                style={styles.input}
-                value={formData.confirmPassword}
-                onChangeText={(text) => handleChange("confirmPassword", text)}
-                secureTextEntry
-                returnKeyType="done"
-                onSubmitEditing={handleSubmit}
-              />
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  ref={confirmPasswordRef}
+                  style={styles.input}
+                  value={formData.confirmPassword}
+                  onChangeText={(text) => handleChange("confirmPassword", text)}
+                  secureTextEntry={!showConfirmPassword}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={styles.eyeButton}
+                >
+                  <Ionicons
+                    name={showConfirmPassword ? "eye-off" : "eye"}
+                    size={22}
+                    color="grey"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <TouchableOpacity
@@ -194,11 +264,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Poppins-Regular",
   },
-  input: {
+  passwordWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#E0E0E0",
+  },
+  input: {
+    flex: 1,
     paddingVertical: 8,
     fontSize: 16,
+  },
+  eyeButton: {
+    padding: 10,
   },
   signupButton: {
     backgroundColor: "#F09216",

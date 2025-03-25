@@ -85,7 +85,6 @@ export default function Signup1() {
               Please enter your details to proceed
             </Text>
 
-            {/* First Name Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>First Name</Text>
               <TextInput
@@ -98,7 +97,6 @@ export default function Signup1() {
               />
             </View>
 
-            {/* Last Name Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Last Name</Text>
               <TextInput
@@ -112,7 +110,6 @@ export default function Signup1() {
               />
             </View>
 
-            {/* Username Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Username</Text>
               <TextInput
@@ -126,7 +123,6 @@ export default function Signup1() {
               />
             </View>
 
-            {/* Email Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Email</Text>
               <TextInput

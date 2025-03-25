@@ -81,7 +81,6 @@ export default function Signup2() {
               Please enter your details to proceed
             </Text>
 
-            {/* Course Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Course</Text>
               <TextInput
@@ -94,7 +93,6 @@ export default function Signup2() {
               />
             </View>
 
-            {/* Branch Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Branch</Text>
               <TextInput
@@ -108,7 +106,6 @@ export default function Signup2() {
               />
             </View>
 
-            {/* Year of Study Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Year of Study</Text>
               <TextInput
