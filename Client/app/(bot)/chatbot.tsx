@@ -14,23 +14,42 @@ export default function Chatbot() {
     }, 100);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (inputText.trim() === '') return;
 
-
+    // Add user message to chat
     const newMessage = { id: messages.length + 1, text: inputText, sender: 'user' };
     setMessages([...messages, newMessage]);
     setInputText('');
 
+    try {
+      // Send request to backend
+      const response = await fetch("http://10.16.48.158:5001/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: inputText }),
+      });
 
-    setTimeout(() => {
+      const data = await response.json();
+
+      // Add bot reply to chat
       const botReply = {
         id: messages.length + 2,
-        text: "I'm here to help! How can I assist you?",
+        text: data.response || "Error: No response from server.",
+        sender: 'bot',
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botReply]);
+
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      const botReply = {
+        id: messages.length + 2,
+        text: "Error communicating with the server.",
         sender: 'bot',
       };
       setMessages((prevMessages) => [...prevMessages, botReply]);
-    }, 1000);
+    }
   };
 
   return (
@@ -44,9 +63,7 @@ export default function Chatbot() {
             <Text style={styles.onlineText}>Online</Text>
           </View>
         </View>
-
       </View>
-
 
       <FlatList
         data={messages}
@@ -57,9 +74,7 @@ export default function Chatbot() {
           </View>
         )}
         contentContainerStyle={styles.chatContainer}
-
       />
-
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -72,19 +87,18 @@ export default function Chatbot() {
             placeholder="Message..."
             style={styles.input}
             underlineColor="transparent"
-            activeUnderlineColor="transparent" 
+            activeUnderlineColor="transparent"
             placeholderTextColor="#999"
           />
           <IconButton
             icon="send"
             size={28}
-            iconColor="#F09216" 
+            iconColor="#F09216"
             style={{ transform: [{ rotate: '0deg' }] }}
             onPress={handleSend}
           />
         </View>
       </KeyboardAvoidingView>
-
     </View>
   );
 }
@@ -106,7 +120,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: -10,
-
   },
   iconButton: {
     width: 50,
@@ -117,8 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 1,
     paddingBottom: 5,
-  }
-  ,
+  },
   textContainer: {
     marginLeft: 5,
   },
@@ -153,7 +165,6 @@ const styles = StyleSheet.create({
   messageText: {
     color: 'black',
   },
-
   inputContainer: {
     paddingBottom: 10,
     paddingHorizontal: 10,
@@ -175,6 +186,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     backgroundColor: 'transparent',
-
   },
 });
