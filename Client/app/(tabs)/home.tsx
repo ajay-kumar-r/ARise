@@ -92,7 +92,7 @@ export default function HomeScreen() {
                           onPress={() =>
                             router.push({
                               pathname: "/topic",
-                              params: { id: topic.id, name: topic.name, description: topic.description },
+                              params: { title:chapter.name,id: topic.id, name: topic.name, description: topic.description },
                             })
                           }
                           left={(props) => <List.Icon {...props} icon="file-document" />}
