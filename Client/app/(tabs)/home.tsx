@@ -21,18 +21,17 @@ export default function HomeScreen() {
       const response = await fetch("http://10.16.49.195:5000/api/subjects");
       const jsonData = await response.json();
 
-      // Map the API response to match the existing structure
       const mappedData = jsonData.map((subject) => ({
-        id: subject.subjectName, // Use subjectName as the ID
+        id: subject.subjectName, 
         name: subject.subjectName,
         chapters: subject.content.map((unit) => ({
-          id: unit._id, // Use _id as the chapter ID
+          id: unit._id, 
           name: unit.unit,
           topics: unit.sections.map((section, index) => ({
-            id: `${unit._id}-${index}`, // Generate a unique ID for each topic
+            id: `${unit._id}-${index}`, 
             name: section.title,
             description: section.subsections
-              ? section.subsections.join(", ") // Combine subsections into a single string
+              ? section.subsections.join(", ") 
               : "No description available",
           })),
         })),
