@@ -61,7 +61,6 @@ export default function LoginScreen() {
           const data = await response.json();
           console.log("Parsed response data:", data);
 
-          // Store email in AsyncStorage
           await AsyncStorage.setItem("userEmail", formData.email);
 
           router.replace("/(tabs)/home");
@@ -288,4 +287,3 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
 });
-

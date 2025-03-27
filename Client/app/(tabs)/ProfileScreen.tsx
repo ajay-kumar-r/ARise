@@ -14,7 +14,6 @@ const ProfileScreen: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Retrieve email from AsyncStorage
         const email = await AsyncStorage.getItem("userEmail");
         if (!email) {
           console.error("No email found in storage");
