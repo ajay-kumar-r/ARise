@@ -18,49 +18,27 @@ export default function HomeScreen() {
 
   const fetchSubjects = async () => {
     try {
-      // TODO: Replace this with actual API call when backend is ready
-      // Example: const response = await fetch('https://your-api-endpoint.com/subjects');
-      // const jsonData = await response.json();
-      const response = await new Promise((resolve) =>
-        setTimeout(
-          () =>
-            resolve([
-              {
-                id: "1",
-                name: "Mathematics",
-                chapters: [
-                  {
-                    id: "1-1",
-                    name: "Algebra",
-                    topics: [
-                      { id: "1-1-1", name: "Linear Equations", description: "Understanding Linear Equations" },
-                      { id: "1-1-2", name: "Quadratic Equations", description: "Introduction to Quadratic Equations" },
-                    ],
-                  },
-                  {
-                    id: "1-2",
-                    name: "Geometry",
-                    topics: [{ id: "1-2-1", name: "Triangles", description: "Types of Triangles" }],
-                  },
-                ],
-              },
-              {
-                id: "2",
-                name: "Physics",
-                chapters: [
-                  {
-                    id: "2-1",
-                    name: "Kinematics",
-                    topics: [{ id: "2-1-1", name: "Velocity", description: "Concepts of Velocity" }],
-                  },
-                ],
-              },
-            ]),
-          1000
-        )
-      );
+      const response = await fetch("http://10.16.49.195:5000/api/subjects");
+      const jsonData = await response.json();
 
-      setData(response);
+      // Map the API response to match the existing structure
+      const mappedData = jsonData.map((subject) => ({
+        id: subject.subjectName, // Use subjectName as the ID
+        name: subject.subjectName,
+        chapters: subject.content.map((unit) => ({
+          id: unit._id, // Use _id as the chapter ID
+          name: unit.unit,
+          topics: unit.sections.map((section, index) => ({
+            id: `${unit._id}-${index}`, // Generate a unique ID for each topic
+            name: section.title,
+            description: section.subsections
+              ? section.subsections.join(", ") // Combine subsections into a single string
+              : "No description available",
+          })),
+        })),
+      }));
+
+      setData(mappedData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
