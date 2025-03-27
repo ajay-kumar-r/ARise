@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface FormData {
   email: string;
@@ -41,7 +42,7 @@ export default function LoginScreen() {
   const handleUserValidation = async () => {
     console.log("Login button pressed");
     try {
-      const response = await fetch("http://10.16.50.125:5000/auth/login", {
+      const response = await fetch("http://10.16.49.195:5000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,6 +60,10 @@ export default function LoginScreen() {
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           console.log("Parsed response data:", data);
+
+          // Store email in AsyncStorage
+          await AsyncStorage.setItem("userEmail", formData.email);
+
           router.replace("/(tabs)/home");
         } else {
           console.log("Unexpected response format");

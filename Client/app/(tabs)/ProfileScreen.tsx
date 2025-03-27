@@ -4,6 +4,7 @@ import { ProgressBar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -13,7 +14,14 @@ const ProfileScreen: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch("http://10.16.49.195:5000/auth/profile?email=johndoe@example.com");
+        // Retrieve email from AsyncStorage
+        const email = await AsyncStorage.getItem("userEmail");
+        if (!email) {
+          console.error("No email found in storage");
+          return;
+        }
+
+        const response = await fetch(`http://10.16.49.195:5000/auth/profile?email=${email}`);
         const data = await response.json();
         setProfile(data);
       } catch (error) {
