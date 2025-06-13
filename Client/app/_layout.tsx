@@ -6,15 +6,25 @@ import { theme } from '../theme';
 
 export default function RootLayout() {
   const pathname = usePathname();
- 
+
+  // Paths where TopBar should not appear
+  const hideTopBarPaths = [
+    '/',
+    '/loginScreen',
+    '/signup1',
+    '/signup2',
+    '/signup3',
+    '/ProfileScreen',
+    '/chatbot',
+  ];
+
   return (
     <PaperProvider theme={theme}>
       <StatusBar style="light" />
-
-      {pathname !== '/greeting' && pathname !== '/loginScreen' && pathname !== '/signup1' && pathname !== '/signup2' && pathname !== '/signup3'  && pathname !== '/ProfileScreen' && pathname!=='/chatbot' && <TopBar />}
+      
+      {!hideTopBarPaths.includes(pathname) && <TopBar />}
 
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="greeting" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </PaperProvider>

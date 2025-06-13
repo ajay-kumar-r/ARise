@@ -84,7 +84,7 @@ export default function LoginScreen() {
       <StatusBar barStyle="light-content" />
 
       <TouchableOpacity
-        onPress={() => router.replace("../greeting")}
+        onPress={() => router.replace("/")}
         style={styles.backButton}
       >
         <Ionicons name="arrow-back" size={24} color="#1D1B20" />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
-import { IconButton, TextInput } from 'react-native-paper';
+import { View, Text, StyleSheet, FlatList, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
 export default function Chatbot() {
@@ -17,13 +17,11 @@ export default function Chatbot() {
   const handleSend = async () => {
     if (inputText.trim() === '') return;
 
-    // Add user message to chat
     const newMessage = { id: messages.length + 1, text: inputText, sender: 'user' };
     setMessages([...messages, newMessage]);
     setInputText('');
 
     try {
-      // Send request to backend
       const response = await fetch("http://10.16.48.158:5001/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,7 +30,6 @@ export default function Chatbot() {
 
       const data = await response.json();
 
-      // Add bot reply to chat
       const botReply = {
         id: messages.length + 2,
         text: data.response || "Error: No response from server.",
@@ -60,7 +57,6 @@ export default function Chatbot() {
           <IconButton icon="robot" style={styles.iconButton} size={33} color="black" />
           <View style={styles.textContainer}>
             <Text style={styles.title}>Helpy</Text>
-            <Text style={styles.onlineText}>Online</Text>
           </View>
         </View>
       </View>
@@ -86,9 +82,10 @@ export default function Chatbot() {
             onChangeText={setInputText}
             placeholder="Message..."
             style={styles.input}
-            underlineColor="transparent"
-            activeUnderlineColor="transparent"
             placeholderTextColor="#999"
+            selectionColor="#F09216"  
+            cursorColor="#F09216"  
+            autoCapitalize="none"
           />
           <IconButton
             icon="send"
@@ -137,12 +134,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#000',
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  onlineText: {
-    fontSize: 13,
-    fontWeight: '400',
-    color: '#fff',
+    fontFamily: 'Poppins-Bold',
   },
   chatContainer: {
     flexGrow: 1,
@@ -164,6 +156,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     color: 'black',
+    fontFamily: 'Poppins-Regular',
   },
   inputContainer: {
     paddingBottom: 10,
@@ -174,7 +167,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 50,
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
+    paddingLeft: 15,
     paddingVertical: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -186,5 +180,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     backgroundColor: 'transparent',
+    fontFamily: 'Poppins-Regular',
+    paddingLeft: 10,
+    height: 45, 
   },
 });
