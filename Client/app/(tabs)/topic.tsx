@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, Button } from "react-native-paper"; // ⬅️ Added Button
 import { useLocalSearchParams } from "expo-router";
 import { topicData } from "../../src/data/topicContent";
 
@@ -10,10 +10,8 @@ const TopicScreen = () => {
     name: string;
   }>();
 
-  // Find the unit that matches the chapter name
   const matchedUnit = topicData.find((unit) => unit.unit === chapter);
 
-  // Initialize matchedContent
   let matchedContent = null;
 
   if (matchedUnit) {
@@ -49,6 +47,8 @@ const TopicScreen = () => {
     );
   }
 
+  const showButton = true;
+
   return (
     <View style={styles.fullScreenWhite}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -80,6 +80,18 @@ const TopicScreen = () => {
               </View>
             ))}
           </>
+        )}
+
+        {showButton && (
+          <Button
+            mode="contained"
+            onPress={() => {}}
+            style={styles.bottomButton}
+            contentStyle={{ paddingVertical: 6 }}
+            labelStyle={{ fontFamily: "Poppins-Bold", fontSize: 20, paddingTop: 3 }}
+          >
+            ARISE!!!!!!!!
+          </Button>
         )}
       </ScrollView>
     </View>
@@ -141,6 +153,13 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     lineHeight: 24,
     color: "#333",
+  },
+  bottomButton: {
+    marginTop: 20,
+    alignSelf: "center",
+    width: "100%",
+    backgroundColor: "#F09216",
+    borderRadius: 8,
   },
 });
 
