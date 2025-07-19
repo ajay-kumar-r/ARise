@@ -7,7 +7,6 @@ import { theme } from '../theme';
 export default function RootLayout() {
   const pathname = usePathname();
 
-  // Paths where TopBar should not appear
   const hideTopBarPaths = [
     '/',
     '/loginScreen',

@@ -1,102 +1,138 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Card, ActivityIndicator } from 'react-native-paper';
-import { useLocalSearchParams } from 'expo-router';
+import React from "react";
+import { ScrollView, View, StyleSheet } from "react-native";
+import { Text } from "react-native-paper";
+import { useLocalSearchParams } from "expo-router";
+import { topicData } from "../../src/data/topicContent";
 
-export default function TopicScreen() {
-  const params = useLocalSearchParams();
-  const topicName = params.chapter || 'Unknown Subject';
-  const subsection = params.name || 'Unknown Subsection';
+const TopicScreen = () => {
+  const { chapter, name } = useLocalSearchParams<{
+    chapter: string;
+    name: string;
+  }>();
 
-  const [loading, setLoading] = useState(true);
-  const [topicDetails, setTopicDetails] = useState(null);
+  const correctUnit = topicData.unit === chapter;
 
-  useEffect(() => {
-    // Reset state when the component is re-rendered for a new topic
-    setTopicDetails(null);
-    setLoading(true);
-    fetchSubtopicDetails();
-  }, [topicName, subsection]); // Add dependencies to re-fetch data when topic changes
+  let matchedContent = topicData.sections.find((sec) => sec.title === name);
 
-  const fetchSubtopicDetails = async () => {
-    try {
-      const response = await fetch("http://10.16.49.195:5000/api/subjects/subtopic-details", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          topicName,
-          subsection,
-        }),
-      });
-
-      const data = await response.json();
-      console.log("API Response:", data); // Log the API response for debugging
-
-      // Set the topic details with the content as the array of strings
-      setTopicDetails({
-        title: topicName, // Use the topic name as the title
-        content: data, // Directly use the array of strings as content
-      });
-    } catch (error) {
-      console.error("Error fetching subtopic details:", error);
-    } finally {
-      setLoading(false);
+  if (!matchedContent) {
+    for (const section of topicData.sections) {
+      if (section.subsections) {
+        const sub = section.subsections.find((s) => s.title === name);
+        if (sub) {
+          matchedContent = {
+            ...sub,
+            parentTitle: section.title,
+            parentContent: section.content,
+          };
+          break;
+        }
+      }
     }
-  };
+  }
 
-  if (loading) {
+  if (!correctUnit || !matchedContent) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#F09216" />
+      <View style={styles.fullScreenWhite}>
+        <Text variant="titleMedium">
+          Content not found. Please go back and try again.
+        </Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <Card mode="outlined">
-        <Card.Title title={topicDetails?.title || "Unknown Topic"} />
-        <Card.Content>
-          <Text variant="bodyMedium" style={styles.sectionTitle}>
-            {topicDetails?.content?.length > 0 ? "Content:" : "No content available."}
-          </Text>
-          {topicDetails?.content && Array.isArray(topicDetails.content) ? (
-            topicDetails.content.map((point, index) => (
-              <Text key={index} style={styles.pointText}>
-                • {point}
-              </Text>
-            ))
-          ) : (
-            <Text>No content available.</Text>
-          )}
-        </Card.Content>
-      </Card>
-    </ScrollView>
+    <View style={styles.fullScreenWhite}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.unitTitle}>{topicData.unit}</Text>
+
+        {"parentTitle" in matchedContent ? (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>{matchedContent.parentTitle}</Text>
+              <Text style={styles.sectionContent}>{matchedContent.parentContent}</Text>
+            </View>
+
+            <View style={styles.subSectionCard}>
+              <Text style={styles.subTitle}>{matchedContent.title}</Text>
+              <Text style={styles.content}>{matchedContent.content}</Text>
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>{matchedContent.title}</Text>
+              <Text style={styles.sectionContent}>{matchedContent.content}</Text>
+            </View>
+
+            {matchedContent.subsections?.map((sub, idx) => (
+              <View key={idx} style={styles.subSectionCard}>
+                <Text style={styles.subTitle}>{sub.title}</Text>
+                <Text style={styles.content}>{sub.content}</Text>
+              </View>
+            ))}
+          </>
+        )}
+      </ScrollView>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  fullScreenWhite: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: "#fff",
   },
-  scrollContainer: {
-    flexGrow: 1,
+  scrollContent: {
     padding: 20,
-    backgroundColor: 'white',
+    paddingBottom: 100,
+  },
+  unitTitle: {
+    fontSize: 24,
+    fontFamily: "Poppins-Bold",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  section: {
+    marginBottom: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    paddingBottom: 16,
   },
   sectionTitle: {
-    marginTop: 10,
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 20,
+    fontFamily: "Poppins-Bold",
+    color: "#000",
+    marginBottom: 10,
   },
-  pointText: {
-    marginTop: 5,
-    marginLeft: 10,
-    fontSize: 14,
-    lineHeight: 20,
+  sectionContent: {
+    fontSize: 15,
+    fontFamily: "Poppins-Regular",
+    color: "#444",
+    lineHeight: 24,
+  },
+  subSectionCard: {
+    backgroundColor: "#f9f9f9",
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  subTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins-Bold",
+    marginBottom: 6,
+    color: "#000",
+  },
+  content: {
+    fontSize: 15,
+    fontFamily: "Poppins-Regular",
+    lineHeight: 24,
+    color: "#333",
   },
 });
+
+export default TopicScreen;

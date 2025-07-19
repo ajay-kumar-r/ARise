@@ -2,53 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, List, ActivityIndicator } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { theme } from '../../theme'; 
-import { Ionicons } from "@expo/vector-icons";
+import { IconButton } from 'react-native-paper';
+import { theme } from '../../theme';
+import { curriculum } from '../../src/data/curriculum';
 
 export default function HomeScreen() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedSubject, setExpandedSubject] = useState(null);
   const [expandedChapters, setExpandedChapters] = useState({});
+  const [expandedTopics, setExpandedTopics] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    fetchSubjects();
+    const timeout = setTimeout(() => {
+      setData(curriculum);
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
   }, []);
-
-  const fetchSubjects = async () => {
-    try {
-      const response = await fetch("http://10.16.49.195:5000/api/subjects");
-      const jsonData = await response.json();
-
-      const mappedData = jsonData.map((subject) => ({
-        id: subject.subjectName, 
-        name: subject.subjectName,
-        chapters: subject.content.map((unit) => ({
-          id: unit._id, 
-          name: unit.unit,
-          topics: unit.sections.map((section, index) => ({
-            id: `${unit._id}-${index}`, 
-            name: section.title,
-            description: section.subsections
-              ? section.subsections.join(", ") 
-              : "No description available",
-          })),
-        })),
-      }));
-
-      setData(mappedData);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    }
-  };
 
   const toggleChapter = (chapterId) => {
     setExpandedChapters((prev) => ({
       ...prev,
       [chapterId]: !prev[chapterId],
+    }));
+  };
+
+  const toggleTopic = (topicId) => {
+    setExpandedTopics((prev) => ({
+      ...prev,
+      [topicId]: !prev[topicId],
     }));
   };
 
@@ -63,6 +47,8 @@ export default function HomeScreen() {
               <TouchableOpacity onPress={() => setExpandedSubject(expandedSubject === subject.id ? null : subject.id)}>
                 <Card.Title
                   title={subject.name}
+                  titleNumberOfLines={5}
+                  titleStyle={{ fontFamily: "Poppins-Bold" }}
                   left={(props) => <List.Icon {...props} icon="book" />}
                   right={(props) => (
                     <List.Icon
@@ -80,25 +66,67 @@ export default function HomeScreen() {
                     <List.Accordion
                       key={chapter.id}
                       title={chapter.name}
+                      titleNumberOfLines={5}
+                      titleStyle={{ fontFamily: "Poppins-Regular" }}
                       expanded={!!expandedChapters[chapter.id]}
                       onPress={() => toggleChapter(chapter.id)}
                       left={(props) => <List.Icon {...props} icon="folder" />}
                       style={styles.chapterDropdown}
                     >
-                      {chapter.topics.map((topic) => (
-                        <List.Item
-                          key={topic.id}
-                          title={topic.name}
-                          onPress={() =>
-                            router.push({
-                              pathname: "/topic",
-                              params: { chapter :chapter.name,id: topic.id, name: topic.name, description: topic.description },
-                            })
-                          }
-                          left={(props) => <List.Icon {...props} icon="file-document" />}
-                          style={styles.topicItem}
-                        />
-                      ))}
+                      {chapter.topics.map((topic) => {
+                        const hasChildren = topic.children && topic.children.length > 0;
+                        return hasChildren ? (
+                          <List.Accordion
+                            key={topic.id}
+                            title={topic.name}
+                            titleNumberOfLines={5}
+                            titleStyle={{ fontFamily: "Poppins-Bold" }}
+                            expanded={!!expandedTopics[topic.id]}
+                            onPress={() => toggleTopic(topic.id)}
+                            left={(props) => <List.Icon {...props} icon="folder-outline" />}
+                            style={styles.topicParent}
+                          >
+                            {topic.children.map((child) => (
+                              <List.Item
+                                key={child.id}
+                                title={child.name}
+                                titleNumberOfLines={5}
+                                titleStyle={{ fontFamily: "Poppins-Regular" }}
+                                onPress={() =>
+                                  router.push({
+                                    pathname: "/topic",
+                                    params: {
+                                      chapter: chapter.name,
+                                      name: child.name,
+                                    },
+                                  })
+                                }
+                                left={(props) => <List.Icon {...props} icon="file-document" />}
+                                style={styles.topicItem}
+                              />
+                            ))}
+                          </List.Accordion>
+                        ) : (
+                          <List.Item
+                            key={topic.id}
+                            title={topic.name}
+                            titleNumberOfLines={5}
+                            titleStyle={{ fontFamily: "Poppins-Regular" }}
+                            onPress={() =>
+                              router.push({
+                                pathname: "/topic",
+                                params: {
+                                  chapter: chapter.name,
+                                  id: topic.id,
+                                  name: topic.name,
+                                },
+                              })
+                            }
+                            left={(props) => <List.Icon {...props} icon="file-document-outline" />}
+                            style={styles.topicItem}
+                          />
+                        );
+                      })}
                     </List.Accordion>
                   ))}
                 </Card.Content>
@@ -112,7 +140,7 @@ export default function HomeScreen() {
         style={styles.floatingButton}
         onPress={() => router.push("/chatbot")}
       >
-        <Ionicons name="chatbubble-ellipses" size={24} color="white" />
+        <IconButton icon="robot" size={24} iconColor="white" />
       </TouchableOpacity>
     </View>
   );
@@ -132,22 +160,27 @@ const styles = StyleSheet.create({
   },
   chapterDropdown: {
     backgroundColor: "#f5f5f5",
+    paddingLeft: 10,
+  },
+  topicParent: {
+    backgroundColor: "white",
+    paddingLeft: 30,
   },
   topicItem: {
-    marginLeft: 30,
+    paddingLeft: 30,
   },
   floatingButton: {
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#F09216", 
+    backgroundColor: "#F09216",
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
