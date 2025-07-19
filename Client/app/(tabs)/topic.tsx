@@ -10,30 +10,39 @@ const TopicScreen = () => {
     name: string;
   }>();
 
-  const correctUnit = topicData.unit === chapter;
+  // Find the unit that matches the chapter name
+  const matchedUnit = topicData.find((unit) => unit.unit === chapter);
 
-  let matchedContent = topicData.sections.find((sec) => sec.title === name);
+  // Initialize matchedContent
+  let matchedContent = null;
 
-  if (!matchedContent) {
-    for (const section of topicData.sections) {
-      if (section.subsections) {
-        const sub = section.subsections.find((s) => s.title === name);
-        if (sub) {
-          matchedContent = {
-            ...sub,
-            parentTitle: section.title,
-            parentContent: section.content,
-          };
-          break;
+  if (matchedUnit) {
+    matchedContent = matchedUnit.sections.find((sec) => sec.title === name);
+
+    if (!matchedContent) {
+      for (const section of matchedUnit.sections) {
+        if (section.subsections) {
+          const sub = section.subsections.find((s) => s.title === name);
+          if (sub) {
+            matchedContent = {
+              ...sub,
+              parentTitle: section.title,
+              parentContent: section.content,
+            };
+            break;
+          }
         }
       }
     }
   }
 
-  if (!correctUnit || !matchedContent) {
+  if (!matchedUnit || !matchedContent) {
     return (
       <View style={styles.fullScreenWhite}>
-        <Text variant="titleMedium">
+        <Text
+          variant="titleMedium"
+          style={[styles.unitTitle, { paddingTop: 275, fontSize: 24, padding: 5 }]}
+        >
           Content not found. Please go back and try again.
         </Text>
       </View>
@@ -43,7 +52,7 @@ const TopicScreen = () => {
   return (
     <View style={styles.fullScreenWhite}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.unitTitle}>{topicData.unit}</Text>
+        <Text style={styles.unitTitle}>{matchedUnit.unit}</Text>
 
         {"parentTitle" in matchedContent ? (
           <>
