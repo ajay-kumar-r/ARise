@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Linking, Alert } from "react-native";
 import { Text, Button } from "react-native-paper"; // ⬅️ Added Button
 import { useLocalSearchParams } from "expo-router";
 import { topicData } from "../../src/data/topicContent";
@@ -9,6 +9,29 @@ const TopicScreen = () => {
     chapter: string;
     name: string;
   }>();
+
+  const openARiseApp = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert(
+          "ARise App Not Found",
+          "Please make sure ARise is installed.",
+          [
+            {
+              text: "OK",
+              style: "cancel"
+            },
+          ]
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Something went wrong while opening ARise.");
+    }
+  };
 
   const matchedUnit = topicData.find((unit) => unit.unit === chapter);
 
@@ -47,7 +70,8 @@ const TopicScreen = () => {
     );
   }
 
-  const showButton = true;
+  const showButton = (matchedContent as any).show_button === true;
+  const ariseUrl = (matchedContent as any).url;
 
   return (
     <View style={styles.fullScreenWhite}>
@@ -82,10 +106,10 @@ const TopicScreen = () => {
           </>
         )}
 
-        {showButton && (
+        {showButton && ariseUrl && (
           <Button
             mode="contained"
-            onPress={() => {}}
+            onPress={() => openARiseApp(ariseUrl)}
             style={styles.bottomButton}
             contentStyle={{ paddingVertical: 6 }}
             labelStyle={{ fontFamily: "Poppins-Bold", fontSize: 20, paddingTop: 3 }}
