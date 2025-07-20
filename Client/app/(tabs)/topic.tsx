@@ -1,6 +1,6 @@
 import React from "react";
-import { ScrollView, View, StyleSheet, Linking, Alert } from "react-native";
-import { Text, Button } from "react-native-paper"; // ⬅️ Added Button
+import { ScrollView, View, StyleSheet, Linking, Alert, Pressable } from "react-native";
+import { Text } from "react-native-paper"; // ⬅️ Removed Button
 import { useLocalSearchParams } from "expo-router";
 import { topicData } from "../../src/data/topicContent";
 
@@ -13,20 +13,8 @@ const TopicScreen = () => {
   const openARiseApp = async (url: string) => {
     try {
       const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        Alert.alert(
-          "ARise App Not Found",
-          "Please make sure ARise is installed.",
-          [
-            {
-              text: "OK",
-              style: "cancel"
-            },
-          ]
-        );
-      }
+      console.log("showButton:", showButton, "ariseUrl:", ariseUrl);
+      await Linking.openURL(url);
     } catch (err) {
       console.error(err);
       Alert.alert("Something went wrong while opening ARise.");
@@ -73,6 +61,8 @@ const TopicScreen = () => {
   const showButton = (matchedContent as any).show_button === true;
   const ariseUrl = (matchedContent as any).url;
 
+  
+
   return (
     <View style={styles.fullScreenWhite}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -107,15 +97,22 @@ const TopicScreen = () => {
         )}
 
         {showButton && ariseUrl && (
-          <Button
-            mode="contained"
+          <Pressable
+            style={{
+              backgroundColor: "#F09216",
+              borderRadius: 8,
+              paddingVertical: 16,
+              alignItems: "center",
+              marginTop: 20,
+              width: "100%",
+              alignSelf: "center",
+            }}
             onPress={() => openARiseApp(ariseUrl)}
-            style={styles.bottomButton}
-            contentStyle={{ paddingVertical: 6 }}
-            labelStyle={{ fontFamily: "Poppins-Bold", fontSize: 20, paddingTop: 3 }}
           >
-            ARISE!!!!!!!!
-          </Button>
+            <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>
+              ARISE!!!!!!!!
+            </Text>
+          </Pressable>
         )}
       </ScrollView>
     </View>
@@ -177,13 +174,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     lineHeight: 24,
     color: "#333",
-  },
-  bottomButton: {
-    marginTop: 20,
-    alignSelf: "center",
-    width: "100%",
-    backgroundColor: "#F09216",
-    borderRadius: 8,
   },
 });
 
