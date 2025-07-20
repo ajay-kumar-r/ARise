@@ -48,7 +48,8 @@ export const topicData = [
       "subsections": [
         {
           "title": "1.5.1 Operations",
-          "content": "- Enqueue: Add to rear.\n- Dequeue: Remove from front.\n- Front: Access front.\n- isEmpty: Check if empty."
+          "content": "- Enqueue: Add to rear.\n- Dequeue: Remove from front.\n- Front: Access front.\n- isEmpty: Check if empty.",
+          "show_button" : true
         },
         {
           "title": "1.5.2 Applications",
@@ -70,7 +71,8 @@ export const topicData = [
         },
         {
           "title": "1.6.2 Singly Linked List",
-          "content": "Each node has data and pointer to next node. Last node points to NULL."
+          "content": "Each node has data and pointer to next node. Last node points to NULL.",
+          "show_button": true
         },
         {
           "title": "1.6.3 Doubly Linked List",
@@ -130,7 +132,8 @@ export const topicData = [
       "subsections": [
         {
           "title": "2.3.1 Properties",
-          "content": "Max nodes at level l = 2^(l-1)\nMax nodes in height h = 2^h -1\nFull binary tree has 2^h -1 nodes"
+          "content": "Max nodes at level l = 2^(l-1)\nMax nodes in height h = 2^h -1\nFull binary tree has 2^h -1 nodes",
+          "show_button": true
         },
         {
           "title": "2.3.2 Types",
@@ -152,7 +155,8 @@ export const topicData = [
     },
     {
       "title": "2.4 Applications of Trees",
-      "content":"2.4.1 Expression Trees\nUsage: Mathematical expressions.\nProcedure: procedure postorderEval(t)\n\n2.4.2 Set Representation\nUsage: Representing disjoint sets.\nOperation: Union operation.\n\n2.4.3 Decision Trees\nProblem: Eight Coins Problem\nProcedure: procedure eightCoins() and compareCoins(x, y, z)"
+      "content":"2.4.1 Expression Trees\nUsage: Mathematical expressions.\nProcedure: procedure postorderEval(t)\n\n2.4.2 Set Representation\nUsage: Representing disjoint sets.\nOperation: Union operation.\n\n2.4.3 Decision Trees\nProblem: Eight Coins Problem\nProcedure: procedure eightCoins() and compareCoins(x, y, z)",
+      "show_button": true
     },
     {
       "title": "2.5 Balanced Trees",
@@ -160,7 +164,8 @@ export const topicData = [
       "subsections": [
         {
           "title": "2.5.1 AVL Tree",
-          "content": "Balance Factor: BF(N) = hL - hR\nRotations: rotateLL(C), rotateRR(A)\nInsertion: AVL insertion uses rotations."
+          "content": "Balance Factor: BF(N) = hL - hR\nRotations: rotateLL(C), rotateRR(A)\nInsertion: AVL insertion uses rotations.",
+          "show_button": true
         }
       ]
     },
@@ -250,7 +255,8 @@ export const topicData = [
     },
     {
       "title": "3.3 Traversals",
-      "content": "For any graph G = (V, E) and a vertex v in V(G), all the reachable vertices from v in\nthe graph may be visited using\ni. Depth First Search and\nii. Breadth First Search"
+      "content": "For any graph G = (V, E) and a vertex v in V(G), all the reachable vertices from v in\nthe graph may be visited using\ni. Depth First Search and\nii. Breadth First Search",
+      "show_button": true
     },
     {
       "title": "3.4 Depth First Search (DFS)",
