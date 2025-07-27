@@ -16,6 +16,7 @@ export default function RootLayout() {
     '/signup3',
     '/ProfileScreen',
     '/chatbot',
+    ,'/leads',
   ];
 
   return (

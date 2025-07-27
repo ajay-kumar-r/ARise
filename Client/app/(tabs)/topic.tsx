@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, View, StyleSheet, Linking, Alert, Pressable } from "react-native";
-import { Text } from "react-native-paper"; // ⬅️ Removed Button
+import { Text } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router";
 import { topicData } from "../../src/data/topicContent";
 
@@ -97,22 +97,27 @@ const TopicScreen = () => {
         )}
 
         {showButton && ariseUrl && (
-          <Pressable
-            style={{
-              backgroundColor: "#F09216",
-              borderRadius: 8,
-              paddingVertical: 16,
-              alignItems: "center",
-              marginTop: 20,
-              width: "100%",
-              alignSelf: "center",
-            }}
-            onPress={() => openARiseApp(ariseUrl)}
-          >
-            <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>
-              ARISE!!!!!!!!
+          <>
+            <Pressable
+              style={{
+                backgroundColor: "#F09216",
+                borderRadius: 8,
+                paddingVertical: 16,
+                alignItems: "center",
+                marginTop: 20,
+                width: "100%",
+                alignSelf: "center",
+              }}
+              onPress={() => openARiseApp(ariseUrl)}
+            >
+              <Text style={{ color: "#fff", fontSize: 20, fontFamily: "Poppins-Bold" }}>
+                ARISE!!!!!!!!
+              </Text>
+            </Pressable>
+            <Text style={[styles.content, { textAlign: "center", marginTop: 10 }]}>
+              (Tap the button to go AR)
             </Text>
-          </Pressable>
+          </>
         )}
       </ScrollView>
     </View>

@@ -35,13 +35,19 @@ export default function IndexScreen() {
 
   const handleGetStarted = () => {
     setTimeout(() => {
-      router.replace('/(auth)/loginScreen');
+      router.push('/(auth)/loginScreen');
     }, 100);
   };
 
   const handleGetBot = () => {
     setTimeout(() => {
-      router.replace('/(bot)/chatbot');
+      router.push('/(bot)/chatbot');
+    }, 100);
+  };
+
+  const handleGetContributors = () => {
+    setTimeout(() => {
+      router.push('/(contributors)/leads');
     }, 100);
   };
 
@@ -79,6 +85,10 @@ export default function IndexScreen() {
         <TouchableOpacity style={styles.button} onPress={handleGetBot}>
           <Text style={[styles.buttonText, {fontFamily: 'Poppins-SemiBold'}]}>ChatBot</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handleGetContributors}>
+          <Text style={styles.contributorLink}>👥 View Contributors</Text>
+        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -138,4 +148,10 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 0,
   },
+  contributorLink: {
+  marginTop: 20,
+  color: '#F7931E',
+  fontSize: 16,
+  fontFamily: 'Poppins-Regular',
+},
 });
