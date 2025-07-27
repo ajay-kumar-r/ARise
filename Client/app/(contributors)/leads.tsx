@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   View,
   Text,
-  Image,
   StyleSheet,
   FlatList,
-  Linking,
   ScrollView,
 } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { contributorsData } from '../../src/data/contributorsData';
-
-const fallbackImage = require('@/assets/images/default_user.png');
+import ContributorCard from '@/components/cards';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 
 const teamOptions = [
   { label: 'Project Leads', value: 'projectLeads' },
@@ -23,52 +25,39 @@ const teamOptions = [
   { label: 'E-Contents Team', value: 'teamEContent' },
 ];
 
-const ContributorCard = ({ item }) => {
-  const [imageError, setImageError] = useState(false);
-  const imageSource =
-    imageError || !item.image ? fallbackImage : { uri: item.image };
-
-  const openLinkedIn = async () => {
-    const fullLink = item.linkedin.startsWith('http')
-      ? item.linkedin
-      : `https://${item.linkedin}`;
-    try {
-      const supported = await Linking.canOpenURL(fullLink);
-      if (supported) {
-        await Linking.openURL(fullLink);
-      } else {
-        Alert.alert('Invalid URL', 'Unable to open this link.');
-      }
-    } catch (err) {
-      Alert.alert('Error', 'Something went wrong while trying to open the link.');
-    }
-  };
-
-  return (
-    <View style={styles.card}>
-      <Image
-        source={imageSource}
-        style={styles.image}
-        onError={() => setImageError(true)}
-      />
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.roll}>{item.roll}</Text>
-      <Text style={styles.email}>{item.gmail}</Text>
-      <Text style={styles.link} onPress={openLinkedIn}>
-        {item.linkedin}
-      </Text>
-    </View>
-  );
-};
-
 const SectionHeader = ({ title }) => (
   <Text style={styles.sectionTitle}>{title}</Text>
 );
 
 export default function LeadsScreen() {
   const [selectedTeam, setSelectedTeam] = useState('projectLeads');
-  const isProjectLeads = selectedTeam === 'projectLeads';
-  const teamData = contributorsData[selectedTeam] || [];
+  const [displayedTeam, setDisplayedTeam] = useState('projectLeads');
+
+  const teamData = contributorsData[displayedTeam] || [];
+  const isProjectLeads = displayedTeam === 'projectLeads';
+
+  const opacity = useSharedValue(1);
+  const translateY = useSharedValue(0);
+  const duration = 350;
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }],
+  }));
+
+  const animateOutIn = (newTeam: string) => {
+    opacity.value = withTiming(0, { duration }, () => {
+      runOnJS(setDisplayedTeam)(newTeam);
+      translateY.value = 20;
+      opacity.value = withTiming(1, { duration });
+      translateY.value = withTiming(0, { duration });
+    });
+  };
+
+  const handleChange = (item: any) => {
+    setSelectedTeam(item.value);
+    animateOutIn(item.value);
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -80,7 +69,7 @@ export default function LeadsScreen() {
             labelField="label"
             valueField="value"
             value={selectedTeam}
-            onChange={(item) => setSelectedTeam(item.value)}
+            onChange={handleChange}
             placeholder="Select Team"
             placeholderStyle={styles.dropdownText}
             selectedTextStyle={styles.dropdownText}
@@ -99,7 +88,7 @@ export default function LeadsScreen() {
           />
         </View>
 
-        <View style={styles.bottomContainer}>
+        <Animated.View style={[styles.bottomContainer, animatedStyle]}>
           {isProjectLeads ? (
             <FlatList
               data={teamData}
@@ -117,7 +106,7 @@ export default function LeadsScreen() {
                 <>
                   <SectionHeader title="Team Heads" />
                   <FlatList
-                    key={`heads-${selectedTeam}`}
+                    key={`heads-${displayedTeam}`}
                     data={teamData.heads}
                     numColumns={2}
                     keyExtractor={(item, index) => `head-${item.name}-${index}`}
@@ -139,7 +128,7 @@ export default function LeadsScreen() {
                     <SectionHeader title="Team Members" />
                   </View>
                   <FlatList
-                    key={`members-${selectedTeam}`}
+                    key={`members-${displayedTeam}`}
                     data={teamData.members}
                     numColumns={2}
                     keyExtractor={(item, index) => `member-${item.name}-${index}`}
@@ -156,7 +145,7 @@ export default function LeadsScreen() {
               )}
             </ScrollView>
           )}
-        </View>
+        </Animated.View>
       </View>
     </GestureHandlerRootView>
   );
@@ -218,48 +207,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 4,
     marginBottom: 16,
-  },
-  card: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
-    elevation: 3,
-    marginBottom: 16,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 12,
-    backgroundColor: '#ccc',
-  },
-  name: {
-    fontSize: 18,
-    fontFamily: 'Poppins-Bold',
-    color: '#000',
-    textAlign: 'center',
-  },
-  roll: {
-    fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#666',
-    marginTop: 2,
-    textAlign: 'center',
-  },
-  email: {
-    fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#333',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  link: {
-    fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#1a0dab',
-    marginTop: 4,
-    textAlign: 'center',
   },
   noDataText: {
     fontSize: 16,
