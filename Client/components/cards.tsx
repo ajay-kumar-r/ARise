@@ -11,12 +11,22 @@ import {
 
 const fallbackImage = require('@/assets/images/default_user.png');
 
+function getImageSource(imageUrl: string | undefined) {
+  if (!imageUrl) return fallbackImage;
+  // Check if it's a Google Drive link
+  const match = imageUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (match) {
+    return { uri: `https://drive.google.com/uc?export=view&id=${match[1]}` };
+  }
+  return { uri: imageUrl };
+}
+
 export default function ContributorCard({ item }) {
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const imageSource =
-    imageError || !item.image ? fallbackImage : { uri: item.image };
+    imageError || !item.image ? fallbackImage : getImageSource(item.image);
 
   const openLinkedIn = async () => {
     const fullLink = item.linkedin.startsWith('http')
@@ -58,8 +68,8 @@ export default function ContributorCard({ item }) {
       <Text style={styles.name} numberOfLines={4}>{item.name}</Text>
       <Text style={styles.roll} numberOfLines={4}>{item.roll}</Text>
       <Text style={styles.email} numberOfLines={4}>{item.gmail}</Text>
-      <Text style={styles.link} numberOfLines={4} onPress={openLinkedIn}>
-        {item.linkedin}
+      <Text style={styles.link} numberOfLines={1} onPress={openLinkedIn}>
+        LinkedIn
       </Text>
     </View>
   );

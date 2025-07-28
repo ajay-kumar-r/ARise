@@ -75,6 +75,20 @@ export const contributorsData = {
   ], 
   members: [
       {
+        name: 'Prasitaa K',
+        roll: '2022115014',
+        gmail: 'prasitaa12a3@gmail.com',
+        linkedin: 'linkedin.com/in/Prasitaa Kannadasan',
+        image: 'https://drive.google.com/file/d/1QwXpxTbDKEfO_QmC-l9F5x81ZU3zi-2e/view?usp=drive_link',
+      },
+      {
+        name: 'Preethi B',
+        roll: '2022115305',
+        gmail: 'preethib163@gmail.com',
+        linkedin: 'linkedin.com/in/preethi-b-7302652b2',
+        image: 'https://drive.google.com/file/d/1Ahj7o6jkI8Fjk3GEi3X8rlCQVXKMctH4/view?usp=drive_link',
+      },
+      {
       name: 'Shevaniga S',
       roll: '2022115008',
       gmail: 'shevanigasri@gmail.com',
@@ -87,13 +101,6 @@ export const contributorsData = {
     gmail: 'Yogasimmanravisagar@gmail.com',
     linkedin: 'linkedin.com/in/yogasimman',
     image: 'https://drive.google.com/file/d/12ebhWrkFNj3GLHWOL6LzESAL6UdojrpQ/view?usp=drive_link',
-    },
-    {
-      name: 'Preethi B',
-      roll: '2022115305',
-      gmail: 'preethib163@gmail.com',
-      linkedin: 'linkedin.com/in/preethi-b-7302652b2',
-      image: 'https://drive.google.com/file/d/1Ahj7o6jkI8Fjk3GEi3X8rlCQVXKMctH4/view?usp=drive_link',
     },
     {
       name: 'Mohamed Afzar N',
@@ -142,14 +149,7 @@ export const contributorsData = {
       roll: '2022115026',
       gmail: 'gowthamikandhasamy1@gmail.com',
       linkedin: 'linkedin.com/in/gowthami-kandhasamy-b345bb343',
-      image: '',
-    },
-    {
-      name: 'Prasitaa K',
-      roll: '2022115014',
-      gmail: 'prasitaa12a3@gmail.com',
-      linkedin: 'linkedin.com/in/Prasitaa Kannadasan',
-      image: 'https://drive.google.com/file/d/1QwXpxTbDKEfO_QmC-l9F5x81ZU3zi-2e/view?usp=drive_link',
+      image: 'https://drive.google.com/file/d/1ZG6rarJYubzAZIVYBe2ywd5RsYDlHE6c/view?usp=drive_link',
     },
     {
       name: 'Razeen N',
@@ -172,7 +172,13 @@ export const contributorsData = {
       linkedin: 'linkedin.com/in/rithis-040105j',
       image: 'https://drive.google.com/file/d/18lTBwZezXpW1rmNv2rRCxhAGB2pmGeG_/view?usp=drive_link',
     },
-
+    {
+      name: 'Gopalakrishnan K',
+      roll: '2022115075',
+      gmail: 'gopikrish2004@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/gopalakrishnan2004',
+      image: 'https://drive.google.com/file/d/1T72u2QpBKNUdSUO1elkxxFvONkjjd4xe/view?usp=sharing',
+    },
 
   ] },
   teamAuthoring: { 
@@ -192,7 +198,7 @@ export const contributorsData = {
       roll: '2022115082',
       gmail: 'arunsaran6666@gmail.com',
       linkedin: 'linkedin.com/in/arun-karthick-saravanan-4958612a7',
-      image: 'https://drive.google.com/file/d/1A0JCi_hQ_BXJokRzpWVXRYEOGqG19WNB/view?usp=drive_link',
+      image: 'https://drive.google.com/file/d/1BoiDziGoRDyKtxyiXmv4J8E-tgJM725N/view?usp=sharing',
     },
     {
     name: 'Abhinav MS',
@@ -228,6 +234,13 @@ export const contributorsData = {
       gmail: 'kaviya080904@gmail.com',
       linkedin: 'linkedin.com/in/kaviya-g-110a4a298',
       image: 'https://drive.google.com/file/d/1KcjyskP7_Ccj1RYza7cvdRju_sVrbhYl/view?usp=drive_link',
+    },
+    {
+      name: 'Syed Sharaafeth Hassan S',
+      roll: '2022115103',
+      gmail: 'syedsharashree@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/syedsharashree329122/',
+      image: 'https://drive.google.com/file/d/14GAs3op9K2hVDgKcWa7nCK_U46K2S1c4/view?usp=sharing',
     },
    ] },
   teamEContent: { 
