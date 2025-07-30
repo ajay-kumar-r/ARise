@@ -67,7 +67,7 @@ export default function IndexScreen() {
             ref={logoRef}
             animation="bounceIn"
             iterationCount="infinite"
-            duration={1500}
+            duration={3000}
             source={require('../assets/images/AR.png')}
             style={styles.logoImage}
             resizeMode="contain"
