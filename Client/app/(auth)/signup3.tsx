@@ -10,11 +10,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ToastAndroid,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "./formContext";
-import { ToastAndroid } from "react-native";
 
 interface FormData {
   password: string;
@@ -66,19 +66,19 @@ export default function Signup3() {
     try {
       console.log("Submitting form data:", formData);
 
-      const response = await fetch("http://10.16.50.125:5000/auth/signup", {
+      const response = await fetch("http://localhost:5000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
           username: formData.username,
           email: formData.email,
           branch: formData.branch,
           course: formData.course,
-          yearOfStudy: formData.yearOfStudy,
+          year_of_study: formData.yearOfStudy,
           password: formData.password,
         }),
       });
@@ -86,7 +86,11 @@ export default function Signup3() {
       if (response.ok) {
         const data = await response.json();
         console.log("Signup successful:", data);
-        ToastAndroid.show("Signup completed successfully", ToastAndroid.SHORT);
+        if (Platform.OS === "android") {
+          ToastAndroid.show("Signup completed successfully", ToastAndroid.SHORT);
+        } else {
+          alert("Signup completed successfully");
+        }
         setTimeout(() => {
           router.push("./loginScreen");
         }, 100);

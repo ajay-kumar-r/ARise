@@ -42,7 +42,7 @@ export default function LoginScreen() {
   const handleUserValidation = async () => {
     console.log("Login button pressed");
     try {
-      const response = await fetch("http://10.16.49.195:5000/auth/login", {
+      const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

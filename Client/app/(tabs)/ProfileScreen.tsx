@@ -20,9 +20,19 @@ const ProfileScreen: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`http://10.16.49.195:5000/auth/profile?email=${email}`);
+        const response = await fetch(`http://localhost:5000/auth/profile?email=${email}`);
         const data = await response.json();
-        setProfile(data);
+        // Map snake_case to camelCase
+        const mappedProfile = {
+          email: data.email,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          branch: data.branch,
+          course: data.course,
+          yearOfStudy: data.year_of_study,
+          // add other fields as needed
+        };
+        setProfile(mappedProfile);
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -65,14 +75,6 @@ const ProfileScreen: React.FC = () => {
           <Ionicons name="create-outline" size={20} color="black" />
         </TouchableOpacity>
 
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressLabel}>Your progress</Text>
-          <View style={styles.progressRow}>
-            <Text style={styles.progressPercentage}>30 % Completed</Text>
-            <Text style={styles.progressTime}>⏳ 50min</Text>
-          </View>
-          <ProgressBar progress={0.3} color="#F1C21B" style={styles.progressBar} />
-        </View>
 
         <View style={styles.card}>
           <Text style={styles.label}>Email</Text>

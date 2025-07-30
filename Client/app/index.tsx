@@ -82,9 +82,9 @@ export default function IndexScreen() {
         <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
           <Text style={[styles.buttonText, {fontFamily: 'Poppins-SemiBold'}]}>Let’s get stARted</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleGetBot}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleGetBot}>
           <Text style={[styles.buttonText, {fontFamily: 'Poppins-SemiBold'}]}>ChatBot</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={handleGetContributors}>
           <Text style={styles.contributorLink}>👥 View Contributors</Text>
         </TouchableOpacity>

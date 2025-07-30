@@ -136,12 +136,12 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      <TouchableOpacity
+      {/*<TouchableOpacity
         style={styles.floatingButton}
         onPress={() => router.push("/chatbot")}
       >
         <IconButton icon="robot" size={24} iconColor="white" />
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
     </View>
   );
 }
