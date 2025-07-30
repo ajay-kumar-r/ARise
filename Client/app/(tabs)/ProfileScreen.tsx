@@ -6,9 +6,11 @@ import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const Ip_addr = "192.168.203.105";
+
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const ProfileScreen: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/auth/profile?email=${email}`);
+        const response = await fetch(`http://${Ip_addr}:5000/auth/profile?email=${email}`);
         const data = await response.json();
         // Map snake_case to camelCase
         const mappedProfile = {

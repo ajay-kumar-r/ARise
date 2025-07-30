@@ -21,6 +21,8 @@ interface FormData {
   password: string;
 }
 
+const IP_ADDR = "192.168.203.105";
+
 export default function LoginScreen() {
   const router = useRouter();
   const [formData, setFormData] = React.useState<FormData>({
@@ -42,7 +44,7 @@ export default function LoginScreen() {
   const handleUserValidation = async () => {
     console.log("Login button pressed");
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(`http://${IP_ADDR}:5000/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

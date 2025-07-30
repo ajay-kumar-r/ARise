@@ -21,6 +21,8 @@ interface FormData {
   confirmPassword: string;
 }
 
+const IP_ADDR = "192.168.203.105";
+
 export default function Signup3() {
   const router = useRouter();
   const { formData, setFormData } = useForm();
@@ -66,7 +68,7 @@ export default function Signup3() {
     try {
       console.log("Submitting form data:", formData);
 
-      const response = await fetch("http://localhost:5000/auth/signup", {
+      const response = await fetch(`http://${IP_ADDR}:5000/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

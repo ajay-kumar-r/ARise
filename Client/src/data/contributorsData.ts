@@ -242,6 +242,20 @@ export const contributorsData = {
       linkedin: 'https://www.linkedin.com/in/syedsharashree329122/',
       image: 'https://drive.google.com/file/d/14GAs3op9K2hVDgKcWa7nCK_U46K2S1c4/view?usp=sharing',
     },
+    {
+        name: 'Neelakandan S',
+        roll: '2022115089',
+        gmail: 'sneelulatha2005@gmail.com',
+        linkedin: 'www.linkedin.com/in/neelakandan-s-profile',
+        image: 'https://drive.google.com/file/d/143rLP4Pj-4r7NnMmCzjctotMV2Y4fwRX/view?usp=sharing',
+    },
+    {
+        name: 'Deepak Chandhru N',
+        roll: '2022115112',
+        gmail: 'chandhrudeepak@gmail.com',
+        linkedin: 'https://www.linkedin.com/in/deepak-chandhru',
+        image: 'https://drive.google.com/file/d/1m-j9LYch4XVhjyVzAZV0goKp4_JRTYw1/view?usp=sharing',
+    },
    ] },
   teamEContent: { 
     heads: [
