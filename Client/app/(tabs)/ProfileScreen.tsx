@@ -1,40 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, TextInput } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Ip_addr = "192.168.203.105";
+const Ip_addr = "192.168.137.1";
 
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation();
   const [profile, setProfile] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState(false);
+  const [editProfile, setEditProfile] = useState<any>({});
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const email = await AsyncStorage.getItem("userEmail");
-        if (!email) {
-          console.error("No email found in storage");
+        const token = await AsyncStorage.getItem("authToken");
+        if (!email || !token) {
+          console.error("No email or token found in storage");
           return;
         }
-
-        const response = await fetch(`http://${Ip_addr}:5000/auth/profile?email=${email}`);
+        const response = await fetch(`http://${Ip_addr}:5000/auth/profile?email=${email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         // Map snake_case to camelCase
         const mappedProfile = {
           email: data.email,
           firstName: data.first_name,
           lastName: data.last_name,
+          username: data.username,
           branch: data.branch,
           course: data.course,
           yearOfStudy: data.year_of_study,
-          // add other fields as needed
         };
         setProfile(mappedProfile);
+        setEditProfile(mappedProfile); // Initialize editProfile with mappedProfile
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -44,6 +51,49 @@ const ProfileScreen: React.FC = () => {
 
     fetchProfile();
   }, []);
+
+  const handleSave = async () => {
+    try {
+      const email = await AsyncStorage.getItem("userEmail");
+      const token = await AsyncStorage.getItem("authToken");
+      if (!email || !token) {
+        console.error("No email or token found in storage");
+        return;
+      }
+      // Prepare data for submission
+      const dataToSubmit = {
+        ...editProfile,
+        email, // Include email from AsyncStorage
+      };
+      const response = await fetch(`http://${Ip_addr}:5000/auth/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(dataToSubmit),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+      const updatedData = await response.json();
+      // Map snake_case to camelCase
+      const mappedUpdatedProfile = {
+        email: updatedData.email,
+        firstName: updatedData.first_name,
+        lastName: updatedData.last_name,
+        username: updatedData.username,
+        branch: updatedData.branch,
+        course: updatedData.course,
+        yearOfStudy: updatedData.year_of_study,
+      };
+      setProfile(mappedUpdatedProfile);
+      setEditProfile(mappedUpdatedProfile); // Update editProfile with the response data
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -66,33 +116,87 @@ const ProfileScreen: React.FC = () => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <View style={styles.profileImageContainer}>
-            <Image source={{ uri: "https://via.placeholder.com/80" }} style={styles.profileImage} />
-          </View>
         </View>
 
         <Text style={styles.name}>{profile.firstName} {profile.lastName}</Text>
         <Text style={styles.subtitle}>{profile.branch}</Text>
-        <TouchableOpacity style={styles.editIcon}>
-          <Ionicons name="create-outline" size={20} color="black" />
+        <TouchableOpacity style={styles.editIcon} onPress={() => setEditMode(!editMode)}>
+          <Ionicons name={editMode ? "checkmark-outline" : "create-outline"} size={20} color="black" />
         </TouchableOpacity>
 
 
         <View style={styles.card}>
           <Text style={styles.label}>Email</Text>
-          <Text style={styles.info}>{profile.email}</Text>
+          <TextInput
+            style={styles.info}
+            value={editProfile.email}
+            editable={false} // Email is always non-editable
+          />
           <Text style={styles.label}>First Name</Text>
-          <Text style={styles.info}>{profile.firstName}</Text>
+          {editMode ? (
+            <TextInput
+              style={styles.info}
+              value={editProfile.firstName}
+              onChangeText={text => setEditProfile({ ...editProfile, firstName: text })}
+            />
+          ) : (
+            <Text style={styles.info}>{profile.firstName}</Text>
+          )}
           <Text style={styles.label}>Last Name</Text>
-          <Text style={styles.info}>{profile.lastName}</Text>
+          {editMode ? (
+            <TextInput
+              style={styles.info}
+              value={editProfile.lastName}
+              onChangeText={text => setEditProfile({ ...editProfile, lastName: text })}
+            />
+          ) : (
+            <Text style={styles.info}>{profile.lastName}</Text>
+          )}
         </View>
 
         <View style={styles.card}>
           <Text style={styles.label}>Year of Study</Text>
-          <Text style={styles.info}>{profile.yearOfStudy}</Text>
+          {editMode ? (
+            <TextInput
+              style={styles.info}
+              value={editProfile.yearOfStudy}
+              onChangeText={text => setEditProfile({ ...editProfile, yearOfStudy: text })}
+            />
+          ) : (
+            <Text style={styles.info}>{profile.yearOfStudy}</Text>
+          )}
           <Text style={styles.label}>Course</Text>
-          <Text style={styles.info}>{profile.course}</Text>
+          {editMode ? (
+            <TextInput
+              style={styles.info}
+              value={editProfile.course}
+              onChangeText={text => setEditProfile({ ...editProfile, course: text })}
+            />
+          ) : (
+            <Text style={styles.info}>{profile.course}</Text>
+          )}
         </View>
+
+        {editMode && (
+          <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 20 }}>
+            <TouchableOpacity
+              style={[styles.loginButton, { marginRight: 10 }]}
+              onPress={async () => {
+                // TODO: Send updated data to backend here
+                setProfile(editProfile);
+                setEditMode(false);
+              }}
+            >
+              <Text style={styles.loginButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => setEditMode(false)}
+            >
+              <Text style={styles.loginButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -194,4 +298,19 @@ const styles = StyleSheet.create({
   },
   label: { fontSize: 14, color: "#F09216CF", marginTop: 10 },
   info: { fontSize: 16, color: "black" },
+  loginButton: {
+    backgroundColor: "#F09216",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  loginButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });

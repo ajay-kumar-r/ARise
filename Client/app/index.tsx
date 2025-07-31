@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'rea
 import * as Animatable from 'react-native-animatable';
 import { useRouter } from 'expo-router';
 import * as Font from 'expo-font';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -33,10 +34,13 @@ export default function IndexScreen() {
     }
   }, [fontsLoaded]);
 
-  const handleGetStarted = () => {
-    setTimeout(() => {
-      router.push('/(auth)/loginScreen');
-    }, 100);
+  const handleGetStarted = async () => {
+    const token = await AsyncStorage.getItem("authToken");
+    if (token) {
+      router.replace("/(tabs)/home");
+    } else {
+      router.push("/(auth)/loginScreen");
+    }
   };
 
   const handleGetBot = () => {

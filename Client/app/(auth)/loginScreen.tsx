@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -21,7 +22,7 @@ interface FormData {
   password: string;
 }
 
-const IP_ADDR = "192.168.203.105";
+const IP_ADDR = "192.168.137.1";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -32,6 +33,20 @@ export default function LoginScreen() {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const passwordRef = useRef<TextInput>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Check for token on mount
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      if (token) {
+        router.replace("/(tabs)/home");
+      } else {
+        setLoading(false);
+      }
+    };
+    checkToken();
+  }, []);
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -42,7 +57,6 @@ export default function LoginScreen() {
   };
 
   const handleUserValidation = async () => {
-    console.log("Login button pressed");
     try {
       const response = await fetch(`http://${IP_ADDR}:5000/auth/login`, {
         method: "POST",
@@ -55,31 +69,35 @@ export default function LoginScreen() {
         }),
       });
 
-      console.log("Response received:", response);
-
       if (response.ok) {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
-          console.log("Parsed response data:", data);
-
+          // Save token and email
+          if (data.token) {
+            await AsyncStorage.setItem("authToken", data.token);
+          }
           await AsyncStorage.setItem("userEmail", formData.email);
-
           router.replace("/(tabs)/home");
         } else {
-          console.log("Unexpected response format");
           alert("Unexpected response format. Please try again.");
         }
       } else {
         const errorData = await response.json().catch(() => null);
-        console.log("Error response data:", errorData);
         alert(errorData?.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
       alert("An error occurred. Please check your network connection.");
     }
   };
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#F09216" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

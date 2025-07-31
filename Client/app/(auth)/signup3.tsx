@@ -21,7 +21,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-const IP_ADDR = "192.168.203.105";
+const IP_ADDR = "192.168.137.1";
 
 export default function Signup3() {
   const router = useRouter();

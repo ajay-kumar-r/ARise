@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, List, ActivityIndicator } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import { IconButton } from 'react-native-paper';
 import { theme } from '../../theme';
 import { curriculum } from '../../src/data/curriculum';
@@ -34,6 +35,12 @@ export default function HomeScreen() {
       ...prev,
       [topicId]: !prev[topicId],
     }));
+  };
+
+  const handleSignOut = async () => {
+    await AsyncStorage.removeItem("authToken");
+    await AsyncStorage.removeItem("userEmail");
+    router.replace("/(auth)/loginScreen");
   };
 
   return (
@@ -136,12 +143,12 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      {/*<TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => router.push("/chatbot")}
+      <TouchableOpacity
+        style={{ alignSelf: "flex-end", margin: 16, backgroundColor: "#F09216", padding: 10, borderRadius: 8 }}
+        onPress={handleSignOut}
       >
-        <IconButton icon="robot" size={24} iconColor="white" />
-      </TouchableOpacity>*/}
+        <IconButton icon="logout" size={20} iconColor="white" style={{ margin: 0 }} />
+      </TouchableOpacity>
     </View>
   );
 }

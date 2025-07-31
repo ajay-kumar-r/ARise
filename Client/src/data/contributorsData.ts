@@ -1,25 +1,25 @@
 export const contributorsData = {
   projectLeads: [
     {
-      name: 'Purushothaman S',
+      name: 'Purushothaman Srinivasan',
       roll: '2022115109',
       gmail: 'purushothamans22122004@gmailo.com',
       linkedin: 'www.linkedin.com/in/purushothaman-srinivasan-a79423258',
-      image: 'image_url_here-drive-link',
+      image: 'https://drive.google.com/file/d/1hctqqrGtiCiu5_Myf8pMETKUptHCL7m_/view?usp=sharing',
     },
     {
       name: 'Ajay Kumar',
       roll: '2022115086',
-      gmail: 'ajay.kumar@domain.com',
-      linkedin: 'linkedin.com/in/ajay-kumar-r2004',
-      image: '',
+      gmail: 'r.ajaykumars@gmail.com',
+      linkedin: 'http://linkedin.com/in/ajay-kumar-r2004',
+      image: 'https://drive.google.com/file/d/1HYh1RBlv_mVxyJzsyBaVPAWe7geP2iCv/view?usp=sharing',
     },
     {
-      name: 'Hariharan P',
+      name: 'Hariharan Prakasam',
       roll: '2022115029',
-      gmail: 'hariharan@domain.com',
-      linkedin: 'linkedin.com/in/sneharao',
-      image: 'https://thisurldoesnotexist.com/fake.jpg',
+      gmail: 'hariharan09092004@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/hari-haran-p-36ab092b1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      image: 'https://drive.google.com/file/d/1p6T-0CkEyRSjuyaHqo0dic6rX7f7iFuI/view?usp=sharing',
     },
   ],
   team3D: {
@@ -190,6 +190,13 @@ export const contributorsData = {
         linkedin: 'linkedin.com/in/jothiruban',
         image: 'https://drive.google.com/file/d/1N2ma7Cq5HbuzEJ78gx0hTw3vVwwnMoLk/view?usp=drive_link',
       },
+      {
+          name: 'Deepak Chandhru N',
+          roll: '2022115112',
+          gmail: 'chandhrudeepak@gmail.com',
+          linkedin: 'https://www.linkedin.com/in/deepak-chandhru',
+          image: 'https://drive.google.com/file/d/1m-j9LYch4XVhjyVzAZV0goKp4_JRTYw1/view?usp=sharing',
+      },
 
   ],
    members: [
@@ -248,13 +255,6 @@ export const contributorsData = {
         gmail: 'sneelulatha2005@gmail.com',
         linkedin: 'www.linkedin.com/in/neelakandan-s-profile',
         image: 'https://drive.google.com/file/d/143rLP4Pj-4r7NnMmCzjctotMV2Y4fwRX/view?usp=sharing',
-    },
-    {
-        name: 'Deepak Chandhru N',
-        roll: '2022115112',
-        gmail: 'chandhrudeepak@gmail.com',
-        linkedin: 'https://www.linkedin.com/in/deepak-chandhru',
-        image: 'https://drive.google.com/file/d/1m-j9LYch4XVhjyVzAZV0goKp4_JRTYw1/view?usp=sharing',
     },
    ] },
   teamEContent: { 
