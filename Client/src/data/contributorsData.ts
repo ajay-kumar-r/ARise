@@ -26,15 +26,15 @@ export const contributorsData = {
     heads: [
       {
         name: 'Mytreyan',
-        roll: '21BCE1001',
-        gmail: 'rahul.singh@domain.com',
-        linkedin: 'linkedin.com/in/rahulsingh',
-        image: '',
+        roll: '2022115102',
+        gmail: 'mytreyan197@gmail.com',
+        linkedin: 'https://www.linkedin.com/in/mytreyan-jp-49226a2a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        image: 'https://drive.google.com/file/d/1Nv36W6iGB5X20A3j5yAOQT3ztATxHgci/view?usp=sharing',
       },
       {
         name: 'Shashank Gopalan',
-        roll: '21BCE1001',
-        gmail: 'rahul.singh@domain.com',
+        roll: '2022115103',
+        gmail: 'shashank.gopalan@gmail.com',
         linkedin: 'linkedin.com/in/rahulsingh',
         image: '',
       },
@@ -54,6 +54,13 @@ export const contributorsData = {
         linkedin: 'linkedin.com/in/suganth-s-a-',
         image: 'https://drive.google.com/file/d/1d_U56XTnMv8oJPmxi4_3guSKZ_FvmoYM/view?usp=drive_link',
       },
+      {
+        name: 'Rasigapriya S',
+        roll: '2022115036',
+        gmail: 'rasigapriyas632@gmail.com',
+        linkedin: 'https://share.google/JluhfbP8aVME9lBEn',
+        image: 'https://drive.google.com/file/d/1XE1pf2-6HnUsk7rJRmHDEvl3_3di53X4/view?usp=sharing',
+      },
 
     ],
   },
@@ -71,6 +78,13 @@ export const contributorsData = {
         gmail: 'bavishyaa1994@gmail.com',
         linkedin: 'linkedin.com/in/bavishyaa-sriraman-5b322a331',
         image: 'https://drive.google.com/file/d/19xEQFPXkbyEz0vUXflRYxEBml_YzaY3b/view?usp=drive_link',
+      },
+      {
+        name: 'Varshitha R',
+        roll: '2022115098',
+        gmail: 'varshitha.rn.0508@gmail.com',
+        linkedin: 'www.linkedin.com/in/varshitha-raghunathan-3b3122273',
+        image: 'https://drive.google.com/file/d/13fS15P93KaSIG5nU4CKjyjfAV6qF80JO/view?usp=sharing',
       },
   ], 
   members: [
@@ -213,6 +227,13 @@ export const contributorsData = {
     gmail: '18abhinavms@gmail.com',
     linkedin: 'linkedin.com/in/ms-abhinav',
     image: 'https://drive.google.com/file/d/13KUjEFTNuywCyfGh8SZP8JRlqM-eQ8oy/view?usp=drive_link',
+    },
+    {
+    name: 'Padma Prabha M',
+    roll: '2022115116',
+    gmail: 'padmaprabhamurugan@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/padma-prabha-murugan-b59b6b2a1/',
+    image: 'https://drive.google.com/file/d/10951ez-M4QVf3pZry7kyR1tThr4-59ho/view?usp=sharing',
     },
     {
       name: 'Sree Ram T R',
