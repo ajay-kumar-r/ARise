@@ -6,7 +6,7 @@ import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Ip_addr = "192.168.137.1";
+const Ip_addr = "14.139.161.40";
 
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation();
