@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
           console.error("No email or token found in storage");
           return;
         }
-        const response = await fetch(`http://${Ip_addr}:5000/auth/profile?email=${email}`, {
+        const response = await fetch(`http://${Ip_addr}:8000/auth/profile?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
