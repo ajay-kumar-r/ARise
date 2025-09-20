@@ -6,7 +6,7 @@ import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Ip_addr = "14.139.161.40";
+const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
 
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
           console.error("No email or token found in storage");
           return;
         }
-        const response = await fetch(`http://${Ip_addr}:8000/auth/profile?email=${email}`, {
+        const response = await fetch(`http://${IP_ADDR}:8000/auth/profile?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ const ProfileScreen: React.FC = () => {
           yearOfStudy: data.year_of_study,
         };
         setProfile(mappedProfile);
-        setEditProfile(mappedProfile); // Initialize editProfile with mappedProfile
+        setEditProfile(mappedProfile); 
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -65,7 +65,7 @@ const ProfileScreen: React.FC = () => {
         ...editProfile,
         email, // Include email from AsyncStorage
       };
-      const response = await fetch(`http://${Ip_addr}:5000/auth/profile`, {
+      const response = await fetch(`http://${IP_ADDR}:5000/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

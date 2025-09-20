@@ -16,12 +16,13 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "./formContext";
 
+const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
+
 interface FormData {
   password: string;
   confirmPassword: string;
 }
 
-const IP_ADDR = "14.139.161.40";
 
 export default function Signup3() {
   const router = useRouter();

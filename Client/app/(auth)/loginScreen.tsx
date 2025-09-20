@@ -16,13 +16,13 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
 
 interface FormData {
   email: string;
   password: string;
 }
 
-const IP_ADDR = "14.139.161.40";
 
 export default function LoginScreen() {
   const router = useRouter();
