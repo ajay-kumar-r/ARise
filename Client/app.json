@@ -16,8 +16,7 @@
         "foregroundImage": "./assets/images/app_icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.Arise.DE",
-      "usesCleartextTraffic": true
+      "package": "com.Arise.DE"
     },
     "web": {
       "bundler": "metro",

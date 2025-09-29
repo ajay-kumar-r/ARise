@@ -69,7 +69,7 @@ export default function Signup3() {
     try {
       console.log("Submitting form data:", formData);
 
-      const response = await fetch(`http://${IP_ADDR}:8000/auth/signup`, {
+      const response = await fetch(`${IP_ADDR}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -23,7 +23,6 @@ interface FormData {
   password: string;
 }
 
-
 export default function LoginScreen() {
   const router = useRouter();
   const [formData, setFormData] = React.useState<FormData>({
@@ -58,7 +57,7 @@ export default function LoginScreen() {
 
   const handleUserValidation = async () => {
     try {
-      const response = await fetch(`http://${IP_ADDR}:8000/auth/login`, {
+      const response = await fetch(`${IP_ADDR}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,10 +82,11 @@ export default function LoginScreen() {
           alert("Unexpected response format. Please try again.");
         }
       } else {
-        const errorData = await response.json().catch(() => null);
-        alert(errorData?.message || "Login failed. Please try again.");
+        const errorText = await response.text();
+        alert(`Login failed: ${errorText}`);
       }
     } catch (error) {
+      console.log("Network error:", error); // Add this line
       alert("An error occurred. Please check your network connection.");
     }
   };

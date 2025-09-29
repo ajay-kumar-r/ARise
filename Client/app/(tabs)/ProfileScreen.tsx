@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
           console.error("No email or token found in storage");
           return;
         }
-        const response = await fetch(`http://${IP_ADDR}:8000/auth/profile?email=${email}`, {
+        const response = await fetch(`${IP_ADDR}/auth/profile?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +65,7 @@ const ProfileScreen: React.FC = () => {
         ...editProfile,
         email, // Include email from AsyncStorage
       };
-      const response = await fetch(`http://${IP_ADDR}:5000/auth/profile`, {
+      const response = await fetch(`${IP_ADDR}/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
