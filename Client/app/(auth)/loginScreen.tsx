@@ -16,7 +16,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
+const IP_ADDR = "https://arisecde.annauniv.edu";
+
 
 interface FormData {
   email: string;
@@ -86,7 +87,7 @@ export default function LoginScreen() {
         alert(`Login failed: ${errorText}`);
       }
     } catch (error) {
-      console.log("Network error:", error); // Add this line
+      //alert("Network error:", error); // Add this line
       alert("An error occurred. Please check your network connection.");
     }
   };

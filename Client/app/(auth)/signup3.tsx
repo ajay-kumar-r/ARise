@@ -16,7 +16,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "./formContext";
 
-const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
+const IP_ADDR = "https://arisecde.annauniv.edu";
 
 interface FormData {
   password: string;
